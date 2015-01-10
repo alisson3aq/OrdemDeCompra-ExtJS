@@ -1,0 +1,99 @@
+.icon-user {
+    background-image: url(../images/user.png) !important;
+}
+
+.icon-user-add {
+    background-image: url(../images/user_add.gif) !important;
+}
+
+.icon-save {
+    background-image: url(../images/save.gif) !important;
+}
+
+.icon-stop {
+    background-image: url(../images/stop.png) !important;
+}
+
+.icon-grid {
+    background-image: url(../images/grid.png) !important;
+}
+
+.icon-add {
+    background-image: url(../images/add.png) !important;
+}
+
+.icon-delete {
+    background-image: url(../images/delete.png) !important;
+}
+
+.icon-exclamation {
+    background-image: url(../images/exclamation.png) !important;
+}
+
+.icon-print {
+    background-image: url(../images/print.png) !important;
+}
+
+.icon-pdf {
+    background-image: url(../images/pdf_icon.gif) !important;
+}
+
+.key-go {
+    background-image: url(../images/key_go.png) !important;
+}
+
+.icon-cancel {
+    background-image: url(../images/cancel.png) !important;
+}
+
+.icon-key {
+    background-image: url(../images/key.png) !important;
+}
+
+.icon-folder {
+    background-image: url(../images/folder.png) !important;
+}
+
+.icon-report {
+    background-image: url(../images/report.png) !important;
+}
+
+.icon-wrench {
+    background-image: url(../images/wrench.png) !important;
+}
+
+.icon-help {
+    background-image: url(../images/help.png) !important;
+}
+
+.icon-date {
+    background-image: url(../images/date.png) !important;
+}
+
+.icon-chart {
+    background-image: url(../images/chart.png) !important;
+}
+
+
+/* CSS LiveSearchGridPanel */
+.x-livesearch-match {
+    font-weight: bold;
+    background-color: yellow;
+}
+
+.x-toolbar .x-form-cb-wrap {
+    line-height: 22px;
+}
+
+.x-toolbar .x-form-checkbox {
+    vertical-align: 0;
+}
+
+.x-grid-row-over .x-grid-cell-inner {
+    font-weight: bold;
+}
+
+.x-grid-row-summary {
+    background-color:#c0c0c0;
+    font-weight:bold;
+}
