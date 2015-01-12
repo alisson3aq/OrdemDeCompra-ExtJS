@@ -26,10 +26,6 @@ Ext.define('OC.controller.Material', {
 				click: this.onPrint
 			},
 
-			"consultamaterial button#pdf": {
-				click: this.onPdf
-			},
-
 			"consultamaterial button#gerarordem": {
 				click: this.onGerarOrdem
 			},
@@ -58,13 +54,6 @@ Ext.define('OC.controller.Material', {
 				processo: values.processo,
 			}
 		});
-
-		Ext.Msg.show({
-			title: 'Store Load Callback',
-			msg: 'Sucesso!',
-			icon: Ext.Msg.INFO,
-			buttons: Ext.Msg.OK
-		});
 	},
 
 	onWindowRender: function(reldatagrid, eOpts) {
@@ -83,8 +72,6 @@ Ext.define('OC.controller.Material', {
 
 				nOrdem.setValue(jsonData.data[0].ID);
 
-				//console.log(jsonData.data[0].ID);
-
 			}
 		});
 
@@ -94,8 +81,6 @@ Ext.define('OC.controller.Material', {
 			storeOc = gridOc.getStore();
 		store.removeAll();
 		storeOc.removeAll();
-
-
 	},
 
 	onPrint: function(btn, eOpts) {
@@ -104,40 +89,25 @@ Ext.define('OC.controller.Material', {
 		Log.ux.grid.Printer.print(grid);
 	},
 
-	onPdf: function(btn, eOpts) {
-		Ext.create('Log.view.relatorios.RelatorioPdf');
-	},
-
-
 
 	onGerarOrdem: function(btn, eOpts) {
 		console.log('Clicou!');
 		var winConsulta = btn.up('window'), //pegar window
-		    grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0],
-		    gridOc = Ext.ComponentQuery.query('consultamaterial gridordem')[0],
-		    storeOc = gridOc.getStore(),
-		    form = Ext.ComponentQuery.query('consultamaterial form')[0],
-		    values = form.getValues(),
-		    combo = Ext.ComponentQuery.query('consultamaterial form combobox#comboentidade')[0],
-		    nOrdem = Ext.ComponentQuery.query('consultamaterial form textfield#id_ordem')[0];
+			grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0],
+			gridOc = Ext.ComponentQuery.query('consultamaterial gridordem')[0],
+			storeOc = gridOc.getStore(),
+			form = Ext.ComponentQuery.query('consultamaterial form')[0],
+			values = form.getValues(),
+			combo = Ext.ComponentQuery.query('consultamaterial form combobox#comboentidade')[0],
+			nOrdem = Ext.ComponentQuery.query('consultamaterial form textfield#id_ordem')[0];
 
 
 		if (storeOc.count() == 0) {
-			Ext.MessageBox.show({
-				title: 'Mensagem',
-				msg: 'Não existem itens parar gerar a ordem!!',
-				buttons: Ext.MessageBox.OK,
-				animateTarget: 'mb9',
-				icon: Ext.MessageBox.WARNING
-			});
+			Ext.Msg.alert('Aviso!', 'Não existem itens para gerar a ordem!');
+
 		} else if (combo.getValue() == null) {
-			Ext.MessageBox.show({
-				title: 'Mensagem',
-				msg: 'Você deve escolher uma entidade compradora!!',
-				buttons: Ext.MessageBox.OK,
-				animateTarget: 'mb9',
-				icon: Ext.MessageBox.WARNING
-			});
+			Ext.Msg.alert('Aviso!', 'Você deve escolher uma entidade compradora!');
+
 		} else {
 
 			var novaordem = Ext.create('OC.model.Ordem', {
@@ -186,18 +156,18 @@ Ext.define('OC.controller.Material', {
 				}
 			});
 
-			Ext.MessageBox.confirm('Confirmar Download', 'Deseja Imprimir a Ordem?', function(choice) {
+			Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
 				if (choice == 'yes') {
 					var win = new Ext.Window({
 						title: 'Ordem de Compra',
 						iconCls: 'icon-grid',
-						maximized: true,
+						//maximized: true,
 						autoShow: true,
 						items: [{
 							xtype: 'uxiframe',
 							width: 600,
-							height: 800,
-							src: 'php/pdf/4.php?nOrdem=' + (nOrdem.getValue() + 1)
+							height: 600,
+							src: 'php/pdf/oc.php?nOrdem=' + (nOrdem.getValue() + 1)
 						}]
 					});
 				}
@@ -208,29 +178,21 @@ Ext.define('OC.controller.Material', {
 	},
 
 	onAddRow: function(gridmaterial, td, cellIndex, record, tr, rowIndex, e, eOpts) {
-		console.log('clcoasd');
+		console.log('Clicou');
 
-		var nOrdem = Ext.ComponentQuery.query('consultamaterial form textfield#id_ordem')[0];
+		var nOrdem = Ext.ComponentQuery.query('consultamaterial form numberfield#id_ordem')[0];
 		var nOrdemValue = nOrdem.getValue();
 
 		var grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0];
 		var store = grid.getStore();
 
-		//console.log('comprar', store.data.items[0].data.comprar);
-
 		var rec = grid.getStore().getAt(rowIndex);
 
 		if (rec.data.comprar == null | rec.data.comprar == "" | rec.data.comprar <= 0) {
-			Ext.MessageBox.show({
-				title: 'Mensagem',
-				msg: 'É necessario escolher a quantidade para comprar!!',
-				buttons: Ext.MessageBox.OK,
-				animateTarget: 'mb9',
-				icon: Ext.MessageBox.WARNING
-			});
+			Ext.Msg.alert('Aviso!', 'É necessario escolher a quantidade para comprar!');
+		} else if (rec.data.comprar > rec.data.qtde_cotada) {
+			Ext.Msg.alert('Aviso!', 'A quantidade para comprar é maior do que a licitada!');
 		} else {
-
-			//	console.log('comprar', rec.data.comprar);
 
 			var gridOc = Ext.ComponentQuery.query('consultamaterial gridordem')[0];
 			var storeOc = gridOc.getStore();
@@ -246,8 +208,17 @@ Ext.define('OC.controller.Material', {
 				i_credores: rec.get('i_credores')
 			});
 
-			storeOc.add(novoItensOrdem);
-
+			if (storeOc.count() == 0) {
+				storeOc.add(novoItensOrdem);
+			} else {
+				storeOc.each(function(record) {
+					if (rec.data.i_credores == record.data.i_credores) {
+						storeOc.add(novoItensOrdem);
+					} else {
+						Ext.Msg.alert('Aviso!', 'Não é possível adicionar um fornecedor diferente!');
+					}
+				});
+			}
 		}
 
 	}

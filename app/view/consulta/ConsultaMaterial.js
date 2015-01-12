@@ -16,7 +16,7 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 	maximized: true,
 	autoScroll: true,
 
-	closeAction : 'destroy',
+	closeAction: 'destroy',
 
 	layout: {
 		type: 'vbox',
@@ -47,34 +47,58 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 		}]
 	}, {
 		xtype: 'form',
-		bodyPadding: 10,
+		bodyPadding: 3,
 		//  bodyStyle: 'background-color: #00CF99',
-		height: 50,
-		width: 400,
+		height: 40,
+		width: 1200,
+		anchor: '100%',
+		layout: {
+			type: 'hbox',
+			align: 'middle',
+			pack: 'center'
+		},
 
 		defaults: { //aplica em todos os itens
+			anchor: '100%',
+			//scale: 'medium',
 			labelAlign: 'right'
+				//mgsTarget: 'side'
 		},
 
 		items: [{
 			xtype: 'combobox',
-			anchor: '100%',
-			fieldLabel: 'Entidade Compradora',
+			width: 350,
+			fieldLabel: 'Entidade Compradora:',
 			store: 'OC.store.combobox.ComboboxEntidades',
 			queryMode: 'local',
 			id: 'comboentidade',
 			displayField: 'nome',
 			valueField: 'id',
 			editable: false
+		}, {
+			xtype: 'textfield',
+			fieldLabel: 'Solicitante:',
+			//	height: 100,
+			//	width: 100
+		}, {
+			xtype: 'textfield',
+			fieldLabel: 'Departamento:',
+			//	height: 100,
+			//	width: 100
+		}, {
+			xtype: 'textfield',
+			fieldLabel: 'Aplicação::',
+			//	height: 100,
+			//	width: 100
 		}]
 	}, ],
 
 	dockedItems: [{
 
 			xtype: 'form',
-			bodyPadding: 10,
+			bodyPadding: 3,
 			//  bodyStyle: 'background-color: #00CF99',
-			height: 50,
+			height: 40,
 			layout: {
 				type: 'hbox',
 				align: 'middle',

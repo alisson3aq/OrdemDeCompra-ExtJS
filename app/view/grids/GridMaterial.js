@@ -40,11 +40,13 @@ Ext.define('OC.view.grids.GridMaterial', {
         }, {
             text: 'Preco Unit',
             dataIndex: 'preco_unit_part',
-            width: 70
+            width: 70,
+            renderer: Ext.util.Format.usMoney
         }, {
             text: 'Total',
             dataIndex: 'preco_total',
-            width: 70
+            width: 70,
+            renderer: Ext.util.Format.usMoney
         }, {
             text: 'Comprar',
             dataIndex: 'comprar',
@@ -52,6 +54,7 @@ Ext.define('OC.view.grids.GridMaterial', {
             align: 'right',
             value: 0,
             idemId: 'comprar',
+            renderer: Ext.util.Format.number('0000.00'),
             editor: {
                 xtype: 'numberfield',
                 allowBlank: true,
@@ -94,7 +97,7 @@ Ext.define('OC.view.grids.GridMaterial', {
 
 
     ],
-    height: 200,
+    height: 300,
     width: 1200,
     renderTo: Ext.getBody(),
 

@@ -23,11 +23,12 @@ Ext.define('OC.view.grids.GridOrdem', {
     }, {
         text: 'Preco Unit',
         dataIndex: 'preco_unit_part',
-        width: 100
+        width: 100,
+        renderer: Ext.util.Format.usMoney
     }, {
         text: 'Comprar',
         dataIndex: 'qtde_comprar',
-        width: 80,
+        width: 120,
         summaryType: 'sum',
         renderer: function(value, metaData, record, rowIdx, colIdx, store, view) {
             return value + ' Unidades';
@@ -38,11 +39,11 @@ Ext.define('OC.view.grids.GridOrdem', {
     }, {
         id: 'total',
         header: 'Total',
-        width: 100,
+        width: 120,
         sortable: false,
         groupable: false,
         renderer: function(value, metaData, record, rowIdx, colIdx, store, view) {
-            return Ext.util.Format.currency(record.get('qtde_comprar') * record.get('preco_unit_part'), 'R$ ', 2);
+            return Ext.util.Format.currency(record.get('qtde_comprar') * record.get('preco_unit_part'), '$ ', 2);
         },
         dataIndex: 'total',
         summaryType: function(records) {
@@ -57,7 +58,7 @@ Ext.define('OC.view.grids.GridOrdem', {
             }
             return total;
         },
-        summaryRenderer: Ext.util.Format.numberRenderer('0.00')
+        summaryRenderer: Ext.util.Format.usMoney
     }],
 
     height: 200,

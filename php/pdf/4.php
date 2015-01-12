@@ -47,10 +47,6 @@ class MYPDF extends TCPDF {
 			$this->Cell($w[2], 6, $row['un_codi'], 'LR', 0, 'C', $fill);
 			$this->Cell($w[3], 6, $row['preco_unit_part'], 'LR', 0, 'C', $fill);
 			$this->Cell($w[4], 6, $row['qtde_comprar'], 'LR', 0, 'C', $fill);
-			//$this->Cell($w[5], 6, $row['qtde_comprar'], 'LR', 0, 'C', $fill);
-			//$this->Cell($w[6], 6, $row[''] . ' LR', 'LR', 0, 'C', $fill);
-			//$this->Cell($w[7], 6, $row['rental_rate'], 'LR', 0, 'C', $fill);
-			//$this->Cell($w[8], 6, $row['last_update'], 'LR', 0, 'C', $fill);
 			$this->Ln();
 			$fill=!$fill;
 		}
