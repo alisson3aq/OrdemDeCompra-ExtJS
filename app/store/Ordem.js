@@ -3,7 +3,7 @@ Ext.define('OC.store.Ordem', {
 
     model: 'OC.model.Ordem',
 
-    //pageSize: 1, // PAGINAGINA MAXIMA
+   // pageSize: 1, // PAGINAGINA MAXIMA
 
     proxy: {
         type: 'ajax',

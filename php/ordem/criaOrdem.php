@@ -11,15 +11,24 @@
 	$i_processo = $data->i_processo;
 	$i_credores = $data->i_credores;
 	$id_entidade = $data->id_entidade;
+	$solicitante = $data->solicitante;
+	$departamento = $data->departamento;
+	$aplicacao = $data->aplicacao;
 	$situacao = $data->situacao;
 
 	//consulta sql
-	$query = sprintf("INSERT INTO ordem (dataPedido, ano, i_processo, i_credores, id_entidade, situacao) values ('%s', '%s', '%s', '%s', '%s', '%s')",
+	$query = sprintf("INSERT INTO ordem (dataPedido, ano, i_processo, 
+		i_credores, id_entidade, solicitante, 
+		departamento, aplicacao, situacao) 
+	values ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
 		mysql_real_escape_string($dataPedido),
 		mysql_real_escape_string($ano),
 		mysql_real_escape_string($i_processo),
 		mysql_real_escape_string($i_credores),
 		mysql_real_escape_string($id_entidade),
+		mysql_real_escape_string($solicitante),
+		mysql_real_escape_string($departamento),
+		mysql_real_escape_string($aplicacao),
 	    mysql_real_escape_string($situacao));
 
 	$rs = mysql_query($query);
@@ -33,6 +42,9 @@
 			"i_processo" => $i_processo,
 			"i_credores" => $i_credores,
 			"id_entidade" => $id_entidade,
+			"solicitante" => $solicitante,
+			"departamento" => $departamento,
+			"aplicacao" => $aplicacao,
 			"situacao" => $situacao
 		)
 	));

@@ -14,7 +14,11 @@ Ext.define('OC.controller.Main', {
 
 			"app-main button#arquivo > menu > menuitem#arqA": {
 				click: this.openGerarOrdem
-			}
+			},
+
+			"app-main button#opcoes > menu > menuitem#opA": {
+				click: this.openUsersGrid
+			},
 
 
 		})
@@ -26,6 +30,11 @@ Ext.define('OC.controller.Main', {
 
 	openGerarOrdem: function(btn, eOpts) {
 		Ext.create('OC.view.consulta.ConsultaMaterial');
+	},
+
+	openUsersGrid: function(btn, eOpts) {
+		Ext.create('OC.view.usuarios.UsersGrid');
 	}
+
 
 });

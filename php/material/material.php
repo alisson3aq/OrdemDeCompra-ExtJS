@@ -45,7 +45,7 @@
 	//echo $logs;
 
 	//consulta total de linhas na tabela
-/*	$queryTotal = mysql_query("SELECT count(*) as num FROM participantes,   
+	$queryTotal = mysql_query("SELECT count(*) as num FROM participantes,   
          itens_processo,
          material,   
          credores  
@@ -55,16 +55,17 @@
          (credores.i_credores = participantes.i_credores) and  
          (participantes.i_ano_proc = '$ano') AND    
          (participantes.i_processo = '$processo') AND  
-         (participantes.situacao IN (2,10)) AND  
+         (participantes.situacao = 2 ) AND  
          (itens_processo.i_ano_proc = '$ano') AND
-         (itens_processo.i_processo = '$processo') LIMIT $start,  $limit") or die(mysql_error());
-//	$row = mysql_fetch_assoc($queryTotal);
-//	$total = $row['num'];*/
+         (itens_processo.i_processo = '$processo')");
+        
+	$row = mysql_fetch_assoc($queryTotal);
+	$total = $row['num'];
 
 	//encoda para formato JSON
 	echo json_encode(array(
 		"success" => mysql_errno() == 0,
-//		"total" => $total,
+		"total" => $total,
 		"data" => $datas
 	));
 ?>

@@ -32,6 +32,10 @@ Ext.define('OC.controller.Material', {
 
 			"consultamaterial gridmaterial": {
 				celldblclick: this.onAddRow
+			},
+
+			"consultamaterial gridordem": {
+				celldblclick: this.onDeleteRow
 			}
 
 		})
@@ -40,13 +44,10 @@ Ext.define('OC.controller.Material', {
 
 	onSearchClick: function(btn, eOpts) {
 		var win = btn.up('window'); //pegar window
-		var form = win.down('form');
-		var values = form.getValues();
-		var grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0];
-		var store = grid.getStore();
-
-		console.log(values.ano);
-		console.log(values.processo);
+		form = win.down('form'),
+			values = form.getValues(),
+			grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0],
+			store = grid.getStore();
 
 		store.load({
 			params: {
@@ -84,9 +85,9 @@ Ext.define('OC.controller.Material', {
 	},
 
 	onPrint: function(btn, eOpts) {
-		var grid = Ext.ComponentQuery.query('reldatagrid grid')[0];
-		Log.ux.grid.Printer.printAutomatically = false;
-		Log.ux.grid.Printer.print(grid);
+		var grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0];
+		OC.ux.grid.Printer.printAutomatically = false;
+		OC.ux.grid.Printer.print(grid);
 	},
 
 
@@ -99,6 +100,9 @@ Ext.define('OC.controller.Material', {
 			form = Ext.ComponentQuery.query('consultamaterial form')[0],
 			values = form.getValues(),
 			combo = Ext.ComponentQuery.query('consultamaterial form combobox#comboentidade')[0],
+			solicitante = Ext.ComponentQuery.query('consultamaterial form textfield#solicitante')[0],
+			departamento = Ext.ComponentQuery.query('consultamaterial form textfield#departamento')[0],
+			aplicacao = Ext.ComponentQuery.query('consultamaterial form textfield#aplicacao')[0],
 			nOrdem = Ext.ComponentQuery.query('consultamaterial form textfield#id_ordem')[0];
 
 
@@ -108,6 +112,8 @@ Ext.define('OC.controller.Material', {
 		} else if (combo.getValue() == null) {
 			Ext.Msg.alert('Aviso!', 'Você deve escolher uma entidade compradora!');
 
+		} else if (solicitante.getValue() == "" & departamento.getValue() == "" & aplicacao.getValue() == "") {
+			Ext.Msg.alert('Aviso!', 'Todos os campos devem ser preenchidos!');
 		} else {
 
 			var novaordem = Ext.create('OC.model.Ordem', {
@@ -117,6 +123,9 @@ Ext.define('OC.controller.Material', {
 				i_processo: values.processo,
 				i_credores: storeOc.data.items[0].data.i_credores,
 				id_entidade: combo.getValue(),
+				solicitante: solicitante.getValue(),
+				departamento: departamento.getValue(),
+				aplicacao: aplicacao.getValue(),
 				situacao: 0
 			});
 
@@ -180,22 +189,21 @@ Ext.define('OC.controller.Material', {
 	onAddRow: function(gridmaterial, td, cellIndex, record, tr, rowIndex, e, eOpts) {
 		console.log('Clicou');
 
-		var nOrdem = Ext.ComponentQuery.query('consultamaterial form numberfield#id_ordem')[0];
-		var nOrdemValue = nOrdem.getValue();
+		var nOrdem = Ext.ComponentQuery.query('consultamaterial form numberfield#id_ordem')[0],
+			nOrdemValue = nOrdem.getValue(),
 
-		var grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0];
-		var store = grid.getStore();
+			grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0],
+			store = grid.getStore(),
 
-		var rec = grid.getStore().getAt(rowIndex);
+			rec = grid.getStore().getAt(rowIndex);
 
 		if (rec.data.comprar == null | rec.data.comprar == "" | rec.data.comprar <= 0) {
 			Ext.Msg.alert('Aviso!', 'É necessario escolher a quantidade para comprar!');
 		} else if (rec.data.comprar > rec.data.qtde_cotada) {
 			Ext.Msg.alert('Aviso!', 'A quantidade para comprar é maior do que a licitada!');
 		} else {
-
-			var gridOc = Ext.ComponentQuery.query('consultamaterial gridordem')[0];
-			var storeOc = gridOc.getStore();
+			var gridOc = Ext.ComponentQuery.query('consultamaterial gridordem')[0],
+				storeOc = gridOc.getStore();
 
 			var novoItensOrdem = Ext.create('OC.model.ItensOrdem', {
 				id_ordem: nOrdemValue + 1,
@@ -211,39 +219,26 @@ Ext.define('OC.controller.Material', {
 			if (storeOc.count() == 0) {
 				storeOc.add(novoItensOrdem);
 			} else {
-				storeOc.each(function(record) {
-					if (rec.data.i_credores == record.data.i_credores) {
+				if (storeOc.find('i_credores', rec.data.i_credores) == -1) {
+					Ext.Msg.alert('Aviso!', 'Não é possível adicionar fornecedor diferente!');
+				} else {
+					if (storeOc.find('i_material', rec.data.i_material) == -1) {
 						storeOc.add(novoItensOrdem);
 					} else {
-						Ext.Msg.alert('Aviso!', 'Não é possível adicionar um fornecedor diferente!');
+						Ext.Msg.alert('Aviso!', 'Material já incluso na ordem!!');
 					}
-				});
+				}
 			}
 		}
 
-	}
-
-
-
-	/*
-	openRelData: function(btn, eOpts) {
-		console.log('Clicou aqui rel');
-		Ext.create('Log.view.relatorios.RelatorioDataGrid');
 	},
 
-	onPrint: function(btn, eOpts) {
-		var grid = btn.up('loggrid');
-		Log.ux.grid.Printer.printAutomatically = false;
-		Log.ux.grid.Printer.print(grid);
+	onDeleteRow: function(gridordem, td, cellIndex, record, tr, rowIndex, e, eOpts) {
+		var gridOc = Ext.ComponentQuery.query('consultamaterial gridordem')[0],
+			records = gridOc.getSelectionModel().getSelection(),
+			storeOc = gridOc.getStore();
+		storeOc.remove(records);
 	}
-
-
-
-	/*onEditClick: function(loggrid, record, item, index, e, eOpts){
-		console.log('testse');
-		Ext.create('Log.view.usuarios.UsersForm');
-	}
-	*/
 
 
 

@@ -1,7 +1,8 @@
 Ext.define('OC.view.grids.GridMaterial', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.gridmaterial',
-
+    
+    requires: ['Ext.toolbar.Paging'],
 
     store: 'OC.store.Material',
 
@@ -12,7 +13,31 @@ Ext.define('OC.view.grids.GridMaterial', {
         }, {
             text: 'Credor',
             dataIndex: 'nome',
-            width: 230
+            width: 230,
+            items: {
+                xtype: 'textfield',
+                width: 30,
+                //height: 10,
+                flex: 1,
+                margin: 2,
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: function() {
+                        var store = this.up('gridmaterial').store;
+                        store.clearFilter();
+                        if (this.value) {
+                            store.filter({
+                                property: 'nome',
+                                value: this.value,
+                                anyMatch: true,
+                                caseSensitive: false
+                            });
+                        }
+                    },
+                    buffer: 500
+                }
+            }
+
         }, {
             text: 'Cod Material',
             dataIndex: 'i_material',
@@ -20,7 +45,31 @@ Ext.define('OC.view.grids.GridMaterial', {
         }, {
             text: 'Material',
             dataIndex: 'nome_mat',
-            width: 300
+            width: 300,
+            items: {
+                xtype: 'textfield',
+                width: 30,
+                //height: 10,
+                flex: 1,
+                margin: 2,
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: function() {
+                        var store = this.up('gridmaterial').store;
+                        store.clearFilter();
+                        if (this.value) {
+                            store.filter({
+                                property: 'nome_mat',
+                                value: this.value,
+                                anyMatch: true,
+                                caseSensitive: false
+                            });
+                        }
+                    },
+                    buffer: 500
+                }
+            }
+
         }, {
             text: 'Marca',
             dataIndex: 'nome_marca',
@@ -98,8 +147,16 @@ Ext.define('OC.view.grids.GridMaterial', {
 
     ],
     height: 300,
-    width: 1200,
+    width: 1300,
     renderTo: Ext.getBody(),
+
+    dockedItems: [{
+            xtype: 'pagingtoolbar',
+            store: 'OC.store.Material', // same store GridPanel is using --- EXEMPLO da documentação
+            dock: 'bottom',
+            displayInfo: true
+        }
+    ],
 
 
 

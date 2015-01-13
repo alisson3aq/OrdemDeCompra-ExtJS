@@ -9,5 +9,5 @@ Ext.application({
 
     extend: 'OC.Application',
     
-    autoCreateViewport: true
+    autoCreateViewport: false
 });

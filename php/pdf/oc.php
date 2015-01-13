@@ -2,6 +2,7 @@
 
 require_once('../tcpdf/config/lang/eng.php');
 require_once('../tcpdf/tcpdf.php');
+include('../valida-cpf-cnpj/class/class-valida-cpf-cnpj.php');
 require_once("../conectar.php");
 
 $nOrdem = $_GET['nOrdem'];
@@ -72,7 +73,9 @@ if ($resultdb = $mysqli->query($sql)) {
 	$resultdb->close();
 }
 
-    $sqlOrdem = "SELECT ordem.id, ordem.dataPedido, ordem.i_processo, processos.modalidade, 
+    $sqlOrdem = "SELECT ordem.id, ordem.dataPedido, ordem.i_processo, 
+    ordem.solicitante, ordem.departamento, ordem.aplicacao,
+    processos.modalidade, 
     processos.sigla_modal, processos.data_homolog, credores.nome AS nomeC, 
     credores.cgc AS cnpjC, credores.endereco AS enderecoC, credores.cidade AS cidadeC, 
     credores.unidade_federacao, entidades.nome, entidades.cnpj, entidades.bairro, entidades.cidade, 
@@ -90,6 +93,9 @@ if ($resultdb = $mysqli->query($sql)) {
              $numeroOrdem = $linha['id'];	
              $dataPedido = $linha['dataPedido'];
              $processo = $linha['i_processo'];
+             $solicitante = $linha['solicitante'];
+             $departamento = $linha['departamento'];
+             $aplicacao = $linha['aplicacao'];
              $modalidade = $linha['modalidade'];
              $sigla_modal = $linha['sigla_modal'];
              $data_homolog = $linha['data_homolog'];
@@ -109,7 +115,26 @@ if ($resultdb = $mysqli->query($sql)) {
       $resultdb->close();
     }
 
+    $sqlTotal = "SELECT sum(itens_ordem.qtde_comprar*itens_ordem.preco_unit_part) AS Total 
+   				 FROM itens_ordem, ordem 
+   				 WHERE (itens_ordem.id_ordem = ordem.id) and
+    				   (ordem.id = '$nOrdem')";
+
+    $queryTotal = mysql_query($sqlTotal) or die(mysql_error());
+
+    if ($resultdb = $mysqli->query($sqlTotal)) {
+             while($linha = mysql_fetch_array($queryTotal)) {
+             $total = $linha['Total'];
+        }
+      $resultdb->close();
+    }
+
+
 	$newDate = date("d-m-Y", strtotime($data_homolog));
+	$newTotal = number_format($total, 2, ',', '.');
+	// Cria um objeto sobre a classe
+	$cpf_cnpj = new ValidaCPFCNPJ($cnpjCredor);
+	$cnpjformatado = $cpf_cnpj->formata();
 
 
 //--------------------------------
@@ -125,7 +150,7 @@ $pdf->SetTitle('Municipio de Monte Carlo');
 //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
-$pdf->SetHeaderData('montecarlo.png', 17, 'ESTADO DE SANTA CATARINA', '');
+$pdf->SetHeaderData('montecarlo.png', 17, 'ESTADO DE SANTA CATARINA.', 'Municipio de Monte Carlo');
 
 // set header and footer fonts
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -186,7 +211,7 @@ $pdf->SetFont('helvetica', '', 10);
 $pdf->Cell(30, 4, $dataPedido, 1, 0, 'C', 0, '', 0); //data
 $pdf->setCellMargins(0, 0, 0, 0);
 $pdf->Cell(112, 4, $nomeCredor, 1, 0, 'L', 0, '', 0); //fornecedor
-$pdf->Cell(36, 4, $cnpjCredor, 1, 1, 'C', 0, '', 0); //cnpj
+$pdf->Cell(36, 4, $cnpjformatado, 1, 1, 'C', 0, '', 0); //cnpj
 
 $pdf->setCellMargins(0, 2, 2, 0);
 $pdf->SetFont('helvetica', '', 8);
@@ -261,13 +286,21 @@ $header = array('ID', 'Material', 'UN', 'Preço', 'Qtde');
 
 // print colored table
 $pdf->ColoredTable($header, $result);
+$pdf->Ln(1);
+$pdf->SetFont('helvetica', 'B', 10);
+$pdf->Cell(140, 0, 'Total da Ordem de Compra R$', 1, 0, 'R',0, '', 0);
+$pdf->Cell(40, 0, $newTotal, 1, 0, 'C',0, '', 0);
+$pdf->Ln(10);
+$pdf->Cell(180, 0, 'Solicitante: '.$solicitante, 1, 1, 'L',0, '', 0);
+$pdf->Cell(180, 0, 'Departamento: '.$departamento, 1, 1, 'L',0, '', 0);
+$pdf->Cell(180, 0, 'Aplicação: '.$aplicacao, 1, 1, 'L',0, '', 0);
+$pdf->Cell(180, 0, 'Ordem de Compra autorizada por: ', 1, 1, 'L',0, '', 0);
 
-$pdf->Ln(80);
 
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('ordem_'.$numeroOrdem.'pdf', 'I');
+$pdf->Output('ordem_'.$numeroOrdem.'.pdf', 'I');
 
 //============================================================+
 // END OF FILE

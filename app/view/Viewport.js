@@ -1,8 +1,11 @@
 Ext.define('OC.view.Viewport', {
     extend: 'Ext.container.Viewport',
+
+    alias: 'widget.mainviewport',
+
     requires:[
         'Ext.layout.container.Fit',
-        'OC.view.Main'
+        'OC.view.Login'
     ],
 
     layout: {

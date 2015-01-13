@@ -37,8 +37,8 @@ Ext.define('OC.view.grids.GridOrdem', {
             return value + ' Unidades';
         }
     }, {
-        id: 'total',
         header: 'Total',
+        id: 'total',
         width: 120,
         sortable: false,
         groupable: false,
@@ -60,9 +60,14 @@ Ext.define('OC.view.grids.GridOrdem', {
         },
         summaryRenderer: Ext.util.Format.usMoney
     }],
+    listeners: {
+        afterrender: function(grid, eOpts) {
+            // Getting summary here
+            console.log('Sum >> ', grid.store.sum('total', true));
+        }},
 
     height: 200,
-    width: 1200,
+    width: 1300,
     renderTo: Ext.getBody()
 
 

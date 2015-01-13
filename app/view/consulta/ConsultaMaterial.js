@@ -5,12 +5,20 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 
 	title: 'Consulta Material',
 
-	requires: ['OC.view.grids.GridMaterial', 'OC.view.grids.GridOrdem'],
+	requires: ['OC.view.grids.GridMaterial', 'OC.view.grids.GridOrdem',
+		'Ext.form.FieldSet',
+		'Ext.grid.plugin.CellEditing',
+		'Ext.grid.column.Action',
+		'Ext.grid.feature.Summary',
+		'Ext.form.field.ComboBox',
+		'Ext.form.field.Date',
+		'OC.ux.grid.Printer'
+	],
 
-	//iconCls: 'icon-grid',
+	iconCls: 'icon-grid',
 
 	autoShow: true,
-
+	modal: true,
 	width: 200,
 	height: 200,
 	maximized: true,
@@ -47,28 +55,25 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 		}]
 	}, {
 		xtype: 'form',
-		bodyPadding: 3,
-		//  bodyStyle: 'background-color: #00CF99',
 		height: 40,
-		width: 1200,
-		anchor: '100%',
+		//width: 1300,
+		//anchor: '100%',
 		layout: {
 			type: 'hbox',
 			align: 'middle',
-			pack: 'center'
+			//pack: 'center'
 		},
 
 		defaults: { //aplica em todos os itens
-			anchor: '100%',
-			//scale: 'medium',
-			labelAlign: 'right'
-				//mgsTarget: 'side'
+			labelAlign: 'right',
+			margin :'3 10 3 1'
 		},
 
 		items: [{
 			xtype: 'combobox',
-			width: 350,
-			fieldLabel: 'Entidade Compradora:',
+		//	width: 350,
+			anchor: '18%',
+			fieldLabel: 'Entidade:',
 			store: 'OC.store.combobox.ComboboxEntidades',
 			queryMode: 'local',
 			id: 'comboentidade',
@@ -78,18 +83,23 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 		}, {
 			xtype: 'textfield',
 			fieldLabel: 'Solicitante:',
-			//	height: 100,
-			//	width: 100
+			id: 'solicitante',
+			allowBlank: false
 		}, {
 			xtype: 'textfield',
 			fieldLabel: 'Departamento:',
-			//	height: 100,
-			//	width: 100
+			id: 'departamento',
+			allowBlank: false
 		}, {
 			xtype: 'textfield',
-			fieldLabel: 'Aplicação::',
-			//	height: 100,
-			//	width: 100
+			fieldLabel: 'Aplicação:',
+			id: 'aplicacao',
+			allowBlank: false
+		}, {
+			xtype: 'datefield',
+			fieldLabel: 'Prazo',
+			id: 'prazo',
+			value: new Date()
 		}]
 	}, ],
 
@@ -114,7 +124,6 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 
 			items: [{
 				xtype: 'datefield',
-				//format: 'd-m-Y',
 				anchor: '18%',
 				fieldLabel: 'Dia',
 				name: 'data',
@@ -144,21 +153,17 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 			xtype: 'toolbar',
 			dock: 'top',
 			items: [{
+					xtype: 'tbfill'
+				}, {
 					xtype: 'button',
 					text: 'Buscar',
 					itemId: 'buscar',
 					iconCls: 'icon-add'
 				}, {
 					xtype: 'button',
-					text: 'Imprimir',
+					text: 'Imprimir Materiais',
 					itemId: 'print',
 					iconCls: 'icon-print'
-
-				}, {
-					xtype: 'button',
-					text: 'Gerar PDF',
-					itemId: 'pdf',
-					iconCls: 'icon-pdf'
 
 				}, {
 					xtype: 'button',

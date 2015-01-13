@@ -77,6 +77,20 @@
     }
 
 
+    $sqlTotal = "SELECT sum(itens_ordem.qtde_comprar*itens_ordem.preco_unit_part) AS Total 
+    FROM itens_ordem, ordem WHERE (itens_ordem.id_ordem = ordem.id) and
+    (ordem.id = '')";
+
+    $queryTotal = mysql_query($sqlTotal) or die(mysql_error());
+
+    if ($resultdb = $mysqli->query($sqlTotal)) {
+             while($linha = mysql_fetch_array($queryTotal)) {
+             $Total = $linha['total'];
+        }
+      $resultdb->close();
+    }
+
+
 
 
 

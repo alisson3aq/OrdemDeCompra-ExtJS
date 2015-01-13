@@ -7,6 +7,9 @@ Ext.define('OC.model.Ordem', {
 		'i_processo',
 		'i_credores',
 		'id_entidade',
+		'solicitante',
+		'departamento',
+		'aplicacao',
 		'situacao'
 	]
 });
