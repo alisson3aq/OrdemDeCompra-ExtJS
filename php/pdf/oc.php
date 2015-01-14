@@ -2,7 +2,7 @@
 
 require_once('../tcpdf/config/lang/eng.php');
 require_once('../tcpdf/tcpdf.php');
-include('../valida-cpf-cnpj/class/class-valida-cpf-cnpj.php');
+include('../util/class-valida-cpf-cnpj.php');
 require_once("../conectar.php");
 
 $nOrdem = $_GET['nOrdem'];
@@ -30,7 +30,7 @@ class MYPDF extends TCPDF {
 		$this->SetLineWidth(0.3);
 		$this->SetFont('', 'B');
 		// Header
-		$w = array(15, 120, 15, 15, 15);
+		$w = array(10, 105, 15, 15, 15, 20);
 		$num_headers = count($header);
 		for($i = 0; $i < $num_headers; ++$i) {
 			$this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', 1);
@@ -48,6 +48,7 @@ class MYPDF extends TCPDF {
 			$this->Cell($w[2], 6, $row['un_codi'], 'LR', 0, 'C', $fill);
 			$this->Cell($w[3], 6, $row['preco_unit_part'], 'LR', 0, 'C', $fill);
 			$this->Cell($w[4], 6, $row['qtde_comprar'], 'LR', 0, 'C', $fill);
+			$this->Cell($w[5], 6, $row['subtotal'], 'LR', 0, 'C', $fill);
 			$this->Ln();
 			$fill=!$fill;
 		}
@@ -57,7 +58,7 @@ class MYPDF extends TCPDF {
 
 
 //load data
-$sql = "SELECT itens_ordem.id, itens_ordem.nome_mat, itens_ordem.un_codi, itens_ordem.preco_unit_part, itens_ordem.qtde_comprar 
+$sql = "SELECT itens_ordem.id, itens_ordem.nome_mat, itens_ordem.un_codi, itens_ordem.preco_unit_part, itens_ordem.qtde_comprar, itens_ordem.subtotal
 FROM itens_ordem, ordem 
 WHERE (itens_ordem.id_ordem = ordem.id) and
 	  (itens_ordem.id_ordem = '$nOrdem')";
@@ -74,7 +75,7 @@ if ($resultdb = $mysqli->query($sql)) {
 }
 
     $sqlOrdem = "SELECT ordem.id, ordem.dataPedido, ordem.i_processo, 
-    ordem.solicitante, ordem.departamento, ordem.aplicacao,
+    ordem.solicitante, ordem.departamento, ordem.aplicacao, ordem.prazo,
     processos.modalidade, 
     processos.sigla_modal, processos.data_homolog, credores.nome AS nomeC, 
     credores.cgc AS cnpjC, credores.endereco AS enderecoC, credores.cidade AS cidadeC, 
@@ -96,6 +97,7 @@ if ($resultdb = $mysqli->query($sql)) {
              $solicitante = $linha['solicitante'];
              $departamento = $linha['departamento'];
              $aplicacao = $linha['aplicacao'];
+             $prazo = $linha['prazo'];
              $modalidade = $linha['modalidade'];
              $sigla_modal = $linha['sigla_modal'];
              $data_homolog = $linha['data_homolog'];
@@ -246,6 +248,8 @@ $pdf->Cell(12, 4, 'SC', 1, 0, 'C', 0, '', 0);
 $pdf->Cell(84, 4, '', 1, 1, 'C', 0, '', 0); 
 
 $pdf->setCellMargins(0, 6, 2, 0);
+$pdf->Cell(180, 0, 'PRAZO DE ENTREGA: '.$prazo, 1, 1, 'C', 1, '', 0);
+$pdf->setCellMargins(0, 3, 2, 0);
 $pdf->Cell(180, 0, 'DADOS PARA EMISSÃO DA NF-e', 1, 1, 'C', 1, '', 0);
 $pdf->Ln(2);
 $pdf->setCellMargins(0, 0, 0, 0);
@@ -282,7 +286,7 @@ $pdf->SetFont('helvetica', '', 10);
 $pdf->setCellMargins(0, 0, 0, 0);
 
 //Column titles
-$header = array('ID', 'Material', 'UN', 'Preço', 'Qtde');
+$header = array('ID', 'Material', 'UN', 'Preço', 'Qtde', 'SubTotal');
 
 // print colored table
 $pdf->ColoredTable($header, $result);

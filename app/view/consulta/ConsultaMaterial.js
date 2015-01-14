@@ -56,6 +56,7 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 	}, {
 		xtype: 'form',
 		height: 40,
+		itemId: 'formObs',
 		//width: 1300,
 		//anchor: '100%',
 		layout: {
@@ -83,22 +84,22 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 		}, {
 			xtype: 'textfield',
 			fieldLabel: 'Solicitante:',
-			id: 'solicitante',
+			name: 'solicitante',
 			allowBlank: false
 		}, {
 			xtype: 'textfield',
 			fieldLabel: 'Departamento:',
-			id: 'departamento',
+			name: 'departamento',
 			allowBlank: false
 		}, {
 			xtype: 'textfield',
 			fieldLabel: 'Aplicação:',
-			id: 'aplicacao',
+			name: 'aplicacao',
 			allowBlank: false
 		}, {
 			xtype: 'datefield',
 			fieldLabel: 'Prazo',
-			id: 'prazo',
+			name: 'prazo',
 			value: new Date()
 		}]
 	}, ],

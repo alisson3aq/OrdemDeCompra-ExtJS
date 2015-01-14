@@ -10,6 +10,7 @@ Ext.define('OC.model.Ordem', {
 		'solicitante',
 		'departamento',
 		'aplicacao',
+		'prazo',
 		'situacao'
 	]
 });

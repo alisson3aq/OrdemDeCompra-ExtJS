@@ -47,7 +47,9 @@ Ext.define('OC.controller.Material', {
 		form = win.down('form'),
 			values = form.getValues(),
 			grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0],
-			store = grid.getStore();
+			store = grid.getStore(),
+			gridOc = Ext.ComponentQuery.query('consultamaterial gridordem')[0],
+			storeOc = gridOc.getStore();
 
 		store.load({
 			params: {
@@ -55,6 +57,8 @@ Ext.define('OC.controller.Material', {
 				processo: values.processo,
 			}
 		});
+
+		storeOc.removeAll();
 	},
 
 	onWindowRender: function(reldatagrid, eOpts) {
@@ -100,9 +104,8 @@ Ext.define('OC.controller.Material', {
 			form = Ext.ComponentQuery.query('consultamaterial form')[0],
 			values = form.getValues(),
 			combo = Ext.ComponentQuery.query('consultamaterial form combobox#comboentidade')[0],
-			solicitante = Ext.ComponentQuery.query('consultamaterial form textfield#solicitante')[0],
-			departamento = Ext.ComponentQuery.query('consultamaterial form textfield#departamento')[0],
-			aplicacao = Ext.ComponentQuery.query('consultamaterial form textfield#aplicacao')[0],
+			formObs = Ext.ComponentQuery.query('consultamaterial form#formObs')[0],
+			valuesObs = formObs.getValues(),
 			nOrdem = Ext.ComponentQuery.query('consultamaterial form textfield#id_ordem')[0];
 
 
@@ -112,76 +115,87 @@ Ext.define('OC.controller.Material', {
 		} else if (combo.getValue() == null) {
 			Ext.Msg.alert('Aviso!', 'Você deve escolher uma entidade compradora!');
 
-		} else if (solicitante.getValue() == "" & departamento.getValue() == "" & aplicacao.getValue() == "") {
+		} else if (valuesObs.solicitante == "" & valuesObs.departamento == "" & valuesObs.aplicacao == "") {
 			Ext.Msg.alert('Aviso!', 'Todos os campos devem ser preenchidos!');
 		} else {
 
-			var novaordem = Ext.create('OC.model.Ordem', {
-				id: nOrdem.getValue() + 1,
-				dataPedido: values.data,
-				ano: values.ano,
-				i_processo: values.processo,
-				i_credores: storeOc.data.items[0].data.i_credores,
-				id_entidade: combo.getValue(),
-				solicitante: solicitante.getValue(),
-				departamento: departamento.getValue(),
-				aplicacao: aplicacao.getValue(),
-				situacao: 0
-			});
-
-			//codifica os dados em JSON
-			var dadosOrdem = Ext.encode(novaordem.data);
-
-			console.log(dadosOrdem);
-
-
-			Ext.Ajax.request({
-				url: 'php/ordem/criaOrdem.php',
-				method: 'POST',
-				success: function() {},
-				params: {
-					'data': dadosOrdem
-				}
-			});
-
-
-			var dadosItensOrdem = [];
-
-			storeOc.each(function(record) {
-				// adiciona cada registro inteiro ao array de dados
-				dadosItensOrdem.push(record.data);
-			});
-			//codifica os dados em JSON
-			dadosItensOrdem = Ext.encode(dadosItensOrdem);
-
-			console.log(dadosItensOrdem);
-
-			Ext.Ajax.request({
-				url: 'php/ordem/criaItensOrdem.php',
-				method: 'POST',
-				success: function() {},
-				params: {
-					'data': dadosItensOrdem
-				}
-			});
-
-			Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
+			Ext.MessageBox.confirm('Confirmar Download', 'Confirmar emissão de ordem??', function(choice) {
 				if (choice == 'yes') {
-					var win = new Ext.Window({
-						title: 'Ordem de Compra',
-						iconCls: 'icon-grid',
-						//maximized: true,
-						autoShow: true,
-						items: [{
-							xtype: 'uxiframe',
-							width: 600,
-							height: 600,
-							src: 'php/pdf/oc.php?nOrdem=' + (nOrdem.getValue() + 1)
-						}]
+
+					var novaordem = Ext.create('OC.model.Ordem', {
+						id: nOrdem.getValue() + 1,
+						dataPedido: values.data,
+						ano: values.ano,
+						i_processo: values.processo,
+						i_credores: storeOc.data.items[0].data.i_credores,
+						id_entidade: combo.getValue(),
+						solicitante: valuesObs.solicitante,
+						departamento: valuesObs.departamento,
+						aplicacao: valuesObs.aplicacao,
+						prazo: valuesObs.prazo,
+						situacao: 0
 					});
+
+					//codifica os dados em JSON
+					var dadosOrdem = Ext.encode(novaordem.data);
+
+					console.log(dadosOrdem);
+
+					Ext.Ajax.request({
+						url: 'php/ordem/criaOrdem.php',
+						method: 'POST',
+						success: function(conn, response, options, eOpts) {},
+						params: {
+							'data': dadosOrdem
+						}
+					});
+
+
+					var dadosItensOrdem = [];
+
+					storeOc.each(function(record) {
+						// adiciona cada registro inteiro ao array de dados
+						dadosItensOrdem.push(record.data);
+					});
+
+					//codifica os dados em JSON
+					dadosItensOrdem = Ext.encode(dadosItensOrdem);
+					//dadosItensOrdem = Ext.util.Utf8.encode(dadosItensOrdem);
+
+					console.log(dadosItensOrdem);
+
+					Ext.Ajax.request({
+						url: 'php/ordem/criaItensOrdem.php',
+						method: 'POST',
+						success: function(conn, response, options, eOpts) {},
+						params: {
+							'data': dadosItensOrdem
+						}
+					});
+
+
+					Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
+						if (choice == 'yes') {
+							var win = new Ext.Window({
+								title: 'Ordem de Compra',
+								iconCls: 'icon-grid',
+								//maximized: true,
+								autoShow: true,
+								items: [{
+									xtype: 'uxiframe',
+									width: 600,
+									height: 600,
+									src: 'php/pdf/oc.php?nOrdem=' + (nOrdem.getValue() + 1)
+								}]
+							});
+						}
+						winConsulta.close();
+					});
+
 				}
-				winConsulta.close();
+
 			});
+
 		}
 
 	},
@@ -191,7 +205,8 @@ Ext.define('OC.controller.Material', {
 
 		var nOrdem = Ext.ComponentQuery.query('consultamaterial form numberfield#id_ordem')[0],
 			nOrdemValue = nOrdem.getValue(),
-
+			form = Ext.ComponentQuery.query('consultamaterial form')[0],
+			values = form.getValues(),
 			grid = Ext.ComponentQuery.query('consultamaterial gridmaterial')[0],
 			store = grid.getStore(),
 
@@ -206,6 +221,7 @@ Ext.define('OC.controller.Material', {
 				storeOc = gridOc.getStore();
 
 			var novoItensOrdem = Ext.create('OC.model.ItensOrdem', {
+				ano: values.ano,
 				id_ordem: nOrdemValue + 1,
 				i_material: rec.get('i_material'),
 				nome_mat: rec.get('nome_mat'),
@@ -213,7 +229,8 @@ Ext.define('OC.controller.Material', {
 				un_codi: rec.get('un_codi'),
 				preco_unit_part: rec.get('preco_unit_part'),
 				qtde_comprar: rec.get('comprar'),
-				i_credores: rec.get('i_credores')
+				i_credores: rec.get('i_credores'),
+				subtotal: (rec.get('preco_unit_part') * rec.get('comprar'))
 			});
 
 			if (storeOc.count() == 0) {
@@ -230,6 +247,7 @@ Ext.define('OC.controller.Material', {
 				}
 			}
 		}
+
 
 	},
 

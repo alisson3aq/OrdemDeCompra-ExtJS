@@ -60,11 +60,6 @@ Ext.define('OC.view.grids.GridOrdem', {
         },
         summaryRenderer: Ext.util.Format.usMoney
     }],
-    listeners: {
-        afterrender: function(grid, eOpts) {
-            // Getting summary here
-            console.log('Sum >> ', grid.store.sum('total', true));
-        }},
 
     height: 200,
     width: 1300,

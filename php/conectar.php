@@ -1,5 +1,5 @@
 <?php
- 
+
 //nome do servidor (127.0.0.1)
 $servidor = "192.168.56.101";
  
@@ -26,5 +26,6 @@ if ($mysqli->connect_errno) {
     printf("Connect failed: %s\n", mysqli_connect_error());
     exit();
 }
+
  
 ?>
