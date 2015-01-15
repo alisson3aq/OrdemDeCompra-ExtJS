@@ -115,7 +115,7 @@ Ext.define('OC.controller.Material', {
 		} else if (combo.getValue() == null) {
 			Ext.Msg.alert('Aviso!', 'Você deve escolher uma entidade compradora!');
 
-		} else if (valuesObs.solicitante == "" & valuesObs.departamento == "" & valuesObs.aplicacao == "") {
+		} else if (valuesObs.solicitante == "" | valuesObs.departamento == "" | valuesObs.aplicacao == "") {
 			Ext.Msg.alert('Aviso!', 'Todos os campos devem ser preenchidos!');
 		} else {
 

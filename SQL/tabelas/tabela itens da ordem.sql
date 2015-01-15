@@ -1,0 +1,1 @@
+create table itens_ordem (id serial, ano int, id_ordem int, i_material int, nome_mat varchar(255), nome_marca varchar(255), un_codi varchar(20), preco_unit_part float, qtde_comprar float, subtotal float) CHARACTER SET utf8 COLLATE utf8_general_ci;

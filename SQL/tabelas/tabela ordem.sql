@@ -1,0 +1,1 @@
+CREATE TABLE ordem (id serial, dataPedido varchar(12), ano int, i_processo int, i_credores int, id_entidade int, solicitante varchar(255), departamento varchar(255), aplicacao varchar(255), prazo varchar(12), situacao int) CHARACTER SET utf8 COLLATE utf8_general_ci;
