@@ -173,6 +173,16 @@ Ext.define('OC.controller.Material', {
 						}
 					});
 
+					Ext.Ajax.request({
+						url: 'php/ordem/atualizaQtde.php',
+						method: 'POST',
+						success: function(conn, response, options, eOpts) {},
+						params: {
+							ano: values.ano,
+							nOrdem: nOrdem.getValue() + 1
+						}
+					});
+
 
 					Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
 						if (choice == 'yes') {
