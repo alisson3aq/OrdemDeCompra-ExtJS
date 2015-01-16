@@ -7,19 +7,6 @@
 
 	$data = json_decode($info);
 
-
-	foreach ($data as $valor) {
-			echo 'ID_ORDEM '.$valor->id_ordem.'<br>';
-			echo 'ano '.$valor->ano.'<br>';
-			echo 'i_material '.$valor->i_material.'<br>';
-			echo 'nome_mat '.$valor->nome_mat.'<br>';
-			echo 'nome_marca '.$valor->nome_marca.'<br>';
-			echo 'un_codi '.$valor->un_codi.'<br>';
-    		echo 'preco_unit_part '.$valor->preco_unit_part.'<br>';
-    		echo 'qtde_comprar '.$valor->qtde_comprar.'<br><br>';
-    		echo 'subtotal '.$valor->subtotal.'<br><br>';
-	}
-
 	// Início da consulta
 	$sql = "INSERT INTO itens_ordem (id_ordem, ano, i_material, nome_mat, nome_marca, 
 		un_codi, preco_unit_part, qtde_comprar, subtotal) VALUES";
@@ -45,13 +32,19 @@
 	$sql = substr($sql, 0, -1);
 
 	// Executa a consulta
-	mysql_query($sql);
+	$rs = mysql_query($sql);
 
+	echo json_encode(array(
+		"success" => mysql_errno() == 0
+	));
+
+	$mysqli->close();
+
+/*
 	// Pega o número de registros inseridos
 	$cadastrados = mysql_affected_rows();
 
 	echo 'Itens cadastrados: ' . $cadastrados;
-
-	$mysqli->close();
+*/
 
 ?>

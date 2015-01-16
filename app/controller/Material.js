@@ -108,6 +108,8 @@ Ext.define('OC.controller.Material', {
 			valuesObs = formObs.getValues(),
 			nOrdem = Ext.ComponentQuery.query('consultamaterial form textfield#id_ordem')[0];
 
+		var ordemSalva = false,
+			itensSalvos = false;
 
 		if (storeOc.count() == 0) {
 			Ext.Msg.alert('Aviso!', 'Não existem itens para gerar a ordem!');
@@ -144,12 +146,30 @@ Ext.define('OC.controller.Material', {
 					Ext.Ajax.request({
 						url: 'php/ordem/criaOrdem.php',
 						method: 'POST',
-						success: function(conn, response, options, eOpts) {},
+						async: false, //<--- requisição síncrona
 						params: {
 							'data': dadosOrdem
+						},
+						success: function(conn, response, options, eOpts) {
+							var result = Ext.JSON.decode(conn.responseText, true);
+
+							if (!result) { // caso seja null
+								result = {};
+								result.success = false;
+								result.msg = conn.responseText;
+							}
+
+							if (result.success) {
+								ordemSalva = true;
+
+							} else {
+								Ext.Msg.alert('Aviso!', 'ERRO AO GERAR ORDEM! CONTATE O ADMINISTRADOR!');
+							}
+						},
+						failure: function(conn, response, options, eOpts) {
+							Ext.Msg.alert('Aviso!', 'ERRO! CONTATE O ADMINISTRADOR!');
 						}
 					});
-
 
 					var dadosItensOrdem = [];
 
@@ -164,59 +184,96 @@ Ext.define('OC.controller.Material', {
 
 					console.log(dadosItensOrdem);
 
-					Ext.Ajax.request({
-						url: 'php/ordem/criaItensOrdem.php',
-						method: 'POST',
-						success: function(conn, response, options, eOpts) {},
-						params: {
-							'data': dadosItensOrdem
-						}
-					});
-
-
-
-					Ext.MessageBox.show({
-						msg: 'Salvando os dados, aguarde...',
-						progressText: 'Salvando...',
-						width: 300,
-						wait: true,
-						waitConfig: {
-							interval: 200
-						},
-						icon: 'ext-mb-download', //custom class in msg-box.html
-						iconHeight: 50,
-					});
-					setTimeout(function() {
-						Ext.MessageBox.hide();
+					if (ordemSalva) {
 						Ext.Ajax.request({
-							url: 'php/ordem/atualizaQtde.php',
+							url: 'php/ordem/criaItensOrdem.php',
 							method: 'POST',
-							success: function(conn, response, options, eOpts) {},
+							async: false,
 							params: {
-								ano: values.ano,
-								nOrdem: nOrdem.getValue() + 1
+								'data': dadosItensOrdem
+							},
+							success: function(conn, response, options, eOpts) {
+								var result = Ext.JSON.decode(conn.responseText, true);
+
+								if (!result) { // caso seja null
+									result = {};
+									result.success = false;
+									result.msg = conn.responseText;
+								}
+
+								if (result.success) {
+									itensSalvos = true;
+
+								} else {
+									Ext.Msg.alert('Aviso!', 'ERRO AO GRAVAR ITENS DA ORDEM! CONTATE O ADMINISTRADOR!');
+								}
+							},
+							failure: function(conn, response, options, eOpts) {
+								Ext.Msg.alert('Aviso!', 'ERRO! CONTATE O ADMINISTRADOR!');
 							}
 						});
-						Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
-							if (choice == 'yes') {
-								var win = new Ext.Window({
-									title: 'Ordem de Compra',
-									iconCls: 'icon-grid',
-									//maximized: true,
-									autoShow: true,
-									items: [{
-										xtype: 'uxiframe',
-										width: 600,
-										height: 600,
-										src: 'php/pdf/oc.php?nOrdem=' + (nOrdem.getValue() + 1)
-									}]
-								});
-							}
-							winConsulta.close();
+					}
+
+					if (itensSalvos) {
+						Ext.MessageBox.show({
+							msg: 'Salvando os dados, aguarde...',
+							progressText: 'Salvando...',
+							width: 300,
+							wait: true,
+							waitConfig: {
+								interval: 200
+							},
+							icon: 'ext-mb-download', //custom class in msg-box.html
+							iconHeight: 50,
 						});
-					}, 10000);
+						setTimeout(function() {
+							Ext.MessageBox.hide();
+							Ext.Ajax.request({
+								url: 'php/ordem/atualizaQtde.php',
+								method: 'POST',
+								params: {
+									ano: values.ano,
+									nOrdem: nOrdem.getValue() + 1
+								},
+								success: function(conn, response, options, eOpts) {
+									var result = Ext.JSON.decode(conn.responseText, true);
 
+									if (!result) { // caso seja null
+										result = {};
+										result.success = false;
+										result.msg = conn.responseText;
+									}
 
+									if (result.success) {
+
+									} else {
+										Ext.Msg.alert('Aviso!', 'ERRO AO ATUALIZAR QTDS! CONTATE O ADMINISTRADOR!');
+									}
+								},
+								failure: function(conn, response, options, eOpts) {
+									Ext.Msg.alert('Aviso!', 'ERRO! CONTATE O ADMINISTRADOR!');
+								}
+							});
+							Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
+								if (choice == 'yes') {
+									var win = new Ext.Window({
+										title: 'Ordem de Compra',
+										iconCls: 'icon-grid',
+										//maximized: true,
+										autoShow: true,
+										items: [{
+											xtype: 'uxiframe',
+											width: 600,
+											height: 600,
+											src: 'php/pdf/oc.php?nOrdem=' + (nOrdem.getValue() + 1)
+										}]
+									});
+								}
+								winConsulta.close();
+							});
+						}, 10000);
+
+					}
 
 				}
 
@@ -242,7 +299,9 @@ Ext.define('OC.controller.Material', {
 			Ext.Msg.alert('Aviso!', 'É necessario escolher a quantidade para comprar!');
 		} else if (rec.data.comprar > rec.data.qtde_cotada) {
 			Ext.Msg.alert('Aviso!', 'A quantidade para comprar é maior do que a licitada!');
-		} else {
+		} else if (values.data > rec.data.vigencia){
+			Ext.Msg.alert('Aviso!', 'A data de validade desse processo acabou!!');
+		}else {
 			var gridOc = Ext.ComponentQuery.query('consultamaterial gridordem')[0],
 				storeOc = gridOc.getStore();
 

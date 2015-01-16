@@ -75,7 +75,8 @@ if ($resultdb = $mysqli->query($sql)) {
 }
 
     $sqlOrdem = "SELECT ordem.id, ordem.dataPedido, ordem.i_processo, 
-    ordem.solicitante, ordem.departamento, ordem.aplicacao, ordem.prazo, usuarios.nome AS nomeUsuario,
+    ordem.solicitante, ordem.departamento, ordem.aplicacao, ordem.prazo, 
+    ordem.situacao, usuarios.nome AS nomeUsuario,
     processos.licitacao, 
     processos.sigla_modal, processos.data_homolog, credores.nome AS nomeC, 
     credores.cgc AS cnpjC, credores.endereco AS enderecoC, credores.cidade AS cidadeC, 
@@ -99,6 +100,7 @@ if ($resultdb = $mysqli->query($sql)) {
              $departamento = $linha['departamento'];
              $aplicacao = $linha['aplicacao'];
              $prazo = $linha['prazo'];
+             $situacao = $linha['situacao'];
              $nomeUsuario = $linha['nomeUsuario'];
              $licitacao = $linha['licitacao'];
              $sigla_modal = $linha['sigla_modal'];
@@ -190,10 +192,15 @@ $pdf->SetFillColor(180);
 
 //Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=0, $link='', $stretch=0, $ignore_min_height=false, $calign='T', $valign='M')
 
-
-$txt = <<<EOD
-ORDEM DE COMPRA nº $numeroOrdem
+if($situacao == 0){
+	$txt = <<<EOD
+			ORDEM DE COMPRA nº $numeroOrdem
 EOD;
+}else{
+	$txt = <<<EOD
+			ORDEM DE COMPRA nº $numeroOrdem CANCELADA
+EOD;
+}
 
 // set font
 $pdf->SetFont('helvetica', 'BI', 14);
