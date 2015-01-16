@@ -31,7 +31,9 @@ Ext.define('OC.view.Main', {
                         id: 'arqA',
                         iconCls: 'icon-date'
                     }, {
-                        text: 'Item 2',
+                        text: 'Ordens Emitidas',
+                        id: 'arqB',
+                        iconCls: 'icon-folder'
                     }, {
                         text: 'Item 3'
                     }, '-', {

@@ -23,3 +23,34 @@ SELECT   credores.nome,
          (itens_processo.i_processo =55)   
 ORDER BY participantes.i_credores ASC,   
          participantes.i_item ASC  
+
+
+
+      SELECT  
+       participantes.i_credores,  
+       credores.nome,
+         material.i_material,
+         material.nome_mat,
+         participantes.nome_marca,
+         participantes.qtde_cotada,  
+         material.un_codi,
+         participantes.vlr_descto,
+         participantes.preco_unit_part,    
+         participantes.preco_total,
+         processos.vigencia
+    FROM participantes,   
+         itens_processo,
+         material,   
+         credores,
+         processos 
+   WHERE   
+         (itens_processo.i_item = participantes.i_item) AND    
+         (material.i_material = itens_processo.i_material) AND    
+         (credores.i_credores = participantes.i_credores) AND 
+         (participantes.i_processo = processos.i_processo) AND
+         (participantes.i_ano_proc = processos.i_ano_proc )AND
+         (participantes.i_ano_proc = '$ano') AND    
+         (participantes.i_processo = '$processo') AND  
+         (participantes.situacao = 2 ) AND  
+         (itens_processo.i_ano_proc = '$ano') AND
+         (itens_processo.i_processo = '$processo') LIMIT $start,  $limit

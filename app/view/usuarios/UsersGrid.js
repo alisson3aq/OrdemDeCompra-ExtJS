@@ -9,7 +9,7 @@ Ext.define('OC.view.usuarios.UsersGrid', {
     modal: true,
 
     height: 400,
-    width: 500,
+    width: 600,
     title: 'Cadastro de Usuarios',
 
     items: [{
@@ -27,6 +27,12 @@ Ext.define('OC.view.usuarios.UsersGrid', {
                 text: 'Nome',
                 width: 192,
                 dataIndex: 'nome'
+            },
+
+            {
+                text: 'Login',
+                width: 192,
+                dataIndex: 'login'
             },
 
             {

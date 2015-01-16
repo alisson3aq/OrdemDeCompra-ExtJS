@@ -1,20 +1,23 @@
-SELECT itens_processo.i_material, itens_processo.qtde_item
- 	FROM itens_processo, itens_ordem, ordem 
-where 
+SELECT participantes.i_item, participantes.qtde_cotada
+  FROM participantes, itens_processo, itens_ordem, ordem
+where
 (itens_ordem.id_ordem = ordem.id) and
-(ordem.i_processo = itens_processo.i_processo) and 
+(ordem.i_processo = participantes.i_processo)and
+(ordem.ano = participantes.i_ano_proc) and
 (ordem.ano = itens_processo.i_ano_proc) and
-(itens_ordem.i_material = itens_processo.i_material) and 
-(ordem.ano = 2014) and
-(ordem.id = 2);
+(itens_ordem.i_material = itens_processo.i_material) and
+(participantes.i_item = itens_processo.i_item) and
+(ordem.ano = 2015) and
+(ordem.id = 1);
 
-
-UPDATE itens_processo, itens_ordem, ordem 
-	SET itens_processo.qtde_item = (itens_processo.qtde_item - itens_ordem.qtde_comprar)
-WHERE 
-(itens_ordem.id_ordem = ordem.id) and
-(ordem.i_processo = itens_processo.i_processo) and 
-(ordem.ano = itens_processo.i_ano_proc) and
-(itens_ordem.i_material = itens_processo.i_material) and 
-(ordem.ano = 2014) and
-(ordem.id = 2);
+UPDATE participantes, itens_processo, itens_ordem, ordem
+  		SET participantes.qtde_cotada = (participantes.qtde_cotada - itens_ordem.qtde_comprar),
+  			participantes.preco_total = ((participantes.qtde_cotada - itens_ordem.qtde_comprar) * participantes.preco_unit_part)
+		WHERE (itens_ordem.id_ordem = ordem.id) and
+				(ordem.i_processo = participantes.i_processo)and
+				(ordem.ano = participantes.i_ano_proc) and
+				(ordem.ano = itens_processo.i_ano_proc) and
+				(itens_ordem.i_material = itens_processo.i_material) and
+				(participantes.i_item = itens_processo.i_item) and
+				(ordem.ano = '$ano') and
+				(ordem.id = '$nOrdem')

@@ -14,11 +14,11 @@ Ext.define('OC.Application', {
     views: ['OC.view.Main'],
 
     controllers: [
-        'Login', 'OC.controller.Main', 'OC.controller.Material', 'OC.controller.usuarios.Users'
+        'Login', 'OC.controller.Main', 'OC.controller.Material', 'OC.controller.usuarios.Users', 'OC.controller.Ordem'
     ],
 
     stores: [
-        'OC.store.Material', 'OC.store.ItensOrdem', 'OC.store.combobox.ComboboxEntidades', 'OC.store.Usuarios'
+        'OC.store.Material', 'OC.store.ItensOrdem', 'OC.store.combobox.ComboboxEntidades', 'OC.store.Usuarios', 'OC.store.Ordem'
     ],
 
     splashscreen: {},

@@ -10,7 +10,7 @@ Ext.define('OC.store.Ordem', {
 
         api: {
             create: 'php/ordem/criarOrdem.php',
-         //   read: 'php/users/listaUsuarios.php',
+            read: 'php/ordem/listarOrdem.php',
          //   update: 'php/users/atualizaUsuario.php',
          //   destroy: 'php/users/deletaUsuario.php',
         },

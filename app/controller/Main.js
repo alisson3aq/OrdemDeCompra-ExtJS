@@ -20,7 +20,9 @@ Ext.define('OC.controller.Main', {
 				click: this.openUsersGrid
 			},
 
-
+			"app-main button#arquivo > menu > menuitem#arqB": {
+				click: this.openOrdemGrid
+			},
 		})
 	},
 
@@ -34,6 +36,10 @@ Ext.define('OC.controller.Main', {
 
 	openUsersGrid: function(btn, eOpts) {
 		Ext.create('OC.view.usuarios.UsersGrid');
+	},
+
+	openOrdemGrid: function(btn, eOpts) {
+			Ext.create('OC.view.consulta.ConsultaOrdem');
 	}
 
 

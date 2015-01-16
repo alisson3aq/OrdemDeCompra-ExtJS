@@ -113,12 +113,10 @@ Ext.define('OC.view.grids.GridMaterial', {
         },
 
         {
-            text: 'Inserir',
             menuDisabled: true,
             sortable: false,
             xtype: 'actioncolumn',
-            name: 'addRow',
-            width: 50,
+            width: 20,
             items: [{
                 getClass: function(v, meta, rec) {
                     if (rec.get('qtde_cotada') <= 0) {
@@ -141,6 +139,11 @@ Ext.define('OC.view.grids.GridMaterial', {
                     //       Ext.Msg.alert(action, action + ' ' + rec.get('nome_mat'));
                     //   }
             }]
+        },
+        {
+            text: 'Vigencia',
+            dataIndex: 'vigencia',
+            width: 90
         }
 
 

@@ -1,7 +1,7 @@
 Ext.define('OC.controller.Material', {
 	extend: 'Ext.app.Controller',
 
-	requires: ['Ext.ux.IFrame'],
+	requires: ['Ext.ux.IFrame', 'Ext.window.MessageBox', 'Ext.tip.*'],
 
 	models: ['OC.model.Material', 'OC.model.Ordem'],
 
@@ -61,7 +61,7 @@ Ext.define('OC.controller.Material', {
 		storeOc.removeAll();
 	},
 
-	onWindowRender: function(reldatagrid, eOpts) {
+	onWindowRender: function(consultamaterial, eOpts) {
 		var combo = Ext.ComponentQuery.query('consultamaterial form combobox#comboentidade')[0];
 		combo.getStore().load();
 		var nOrdem = Ext.ComponentQuery.query('consultamaterial form textfield#id_ordem')[0];
@@ -173,34 +173,50 @@ Ext.define('OC.controller.Material', {
 						}
 					});
 
-					Ext.Ajax.request({
-						url: 'php/ordem/atualizaQtde.php',
-						method: 'POST',
-						success: function(conn, response, options, eOpts) {},
-						params: {
-							ano: values.ano,
-							nOrdem: nOrdem.getValue() + 1
-						}
-					});
 
 
-					Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
-						if (choice == 'yes') {
-							var win = new Ext.Window({
-								title: 'Ordem de Compra',
-								iconCls: 'icon-grid',
-								//maximized: true,
-								autoShow: true,
-								items: [{
-									xtype: 'uxiframe',
-									width: 600,
-									height: 600,
-									src: 'php/pdf/oc.php?nOrdem=' + (nOrdem.getValue() + 1)
-								}]
-							});
-						}
-						winConsulta.close();
+					Ext.MessageBox.show({
+						msg: 'Salvando os dados, aguarde...',
+						progressText: 'Salvando...',
+						width: 300,
+						wait: true,
+						waitConfig: {
+							interval: 200
+						},
+						icon: 'ext-mb-download', //custom class in msg-box.html
+						iconHeight: 50,
 					});
+					setTimeout(function() {
+						Ext.MessageBox.hide();
+						Ext.Ajax.request({
+							url: 'php/ordem/atualizaQtde.php',
+							method: 'POST',
+							success: function(conn, response, options, eOpts) {},
+							params: {
+								ano: values.ano,
+								nOrdem: nOrdem.getValue() + 1
+							}
+						});
+						Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
+							if (choice == 'yes') {
+								var win = new Ext.Window({
+									title: 'Ordem de Compra',
+									iconCls: 'icon-grid',
+									//maximized: true,
+									autoShow: true,
+									items: [{
+										xtype: 'uxiframe',
+										width: 600,
+										height: 600,
+										src: 'php/pdf/oc.php?nOrdem=' + (nOrdem.getValue() + 1)
+									}]
+								});
+							}
+							winConsulta.close();
+						});
+					}, 10000);
+
+
 
 				}
 

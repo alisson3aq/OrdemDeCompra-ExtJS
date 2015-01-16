@@ -17,4 +17,6 @@
 	echo json_encode(array(
 		"success" => mysql_errno() == 0
 	));
+
+	$mysqli->close();
 ?>

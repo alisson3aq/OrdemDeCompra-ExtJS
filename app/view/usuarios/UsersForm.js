@@ -31,6 +31,11 @@ Ext.define('OC.view.usuarios.UsersForm', {
 
 		}, {
 			xtype: 'textfield',
+			name: 'login',
+			fieldLabel: 'Login'
+
+		}, {
+			xtype: 'textfield',
 			inputType: 'password',
 			name: 'senha',
 			fieldLabel: 'Senha'

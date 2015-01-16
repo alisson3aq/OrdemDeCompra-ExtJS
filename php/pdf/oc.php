@@ -48,7 +48,7 @@ class MYPDF extends TCPDF {
 			$this->Cell($w[2], 6, $row['un_codi'], 'LR', 0, 'C', $fill);
 			$this->Cell($w[3], 6, $row['preco_unit_part'], 'LR', 0, 'C', $fill);
 			$this->Cell($w[4], 6, $row['qtde_comprar'], 'LR', 0, 'C', $fill);
-			$this->Cell($w[5], 6, $row['subtotal'], 'LR', 0, 'C', $fill);
+			$this->Cell($w[5], 6, number_format($row['subtotal'], 2, ',', '.'), 'LR', 0, 'C', $fill);
 			$this->Ln();
 			$fill=!$fill;
 		}
@@ -75,17 +75,18 @@ if ($resultdb = $mysqli->query($sql)) {
 }
 
     $sqlOrdem = "SELECT ordem.id, ordem.dataPedido, ordem.i_processo, 
-    ordem.solicitante, ordem.departamento, ordem.aplicacao, ordem.prazo,
-    processos.modalidade, 
+    ordem.solicitante, ordem.departamento, ordem.aplicacao, ordem.prazo, usuarios.nome AS nomeUsuario,
+    processos.licitacao, 
     processos.sigla_modal, processos.data_homolog, credores.nome AS nomeC, 
     credores.cgc AS cnpjC, credores.endereco AS enderecoC, credores.cidade AS cidadeC, 
     credores.unidade_federacao, entidades.nome, entidades.cnpj, entidades.bairro, entidades.cidade, 
     entidades.estado, entidades.cep, entidades.email 
-    FROM ordem, processos, credores, entidades 
+    FROM ordem, processos, credores, entidades, usuarios
     WHERE (ordem.i_processo = processos.i_processo) and 
     (ordem.id = '$nOrdem') and (ordem.ano = processos.i_ano_proc) and
     (ordem.i_credores = credores.i_credores) and 
-    (ordem.id_entidade = entidades.id)";
+    (ordem.id_entidade = entidades.id) and
+    (ordem.nome = usuarios.login)";
 
     $queryOrdem = mysql_query($sqlOrdem) or die(mysql_error());
 
@@ -98,7 +99,8 @@ if ($resultdb = $mysqli->query($sql)) {
              $departamento = $linha['departamento'];
              $aplicacao = $linha['aplicacao'];
              $prazo = $linha['prazo'];
-             $modalidade = $linha['modalidade'];
+             $nomeUsuario = $linha['nomeUsuario'];
+             $licitacao = $linha['licitacao'];
              $sigla_modal = $linha['sigla_modal'];
              $data_homolog = $linha['data_homolog'];
              $nomeCredor = $linha['nomeC'];
@@ -139,6 +141,7 @@ if ($resultdb = $mysqli->query($sql)) {
 	$cnpjformatado = $cpf_cnpj->formata();
 
 
+
 //--------------------------------
 
 // create new PDF document
@@ -146,13 +149,13 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Nicola Asuni');
+$pdf->SetAuthor('Rafael Barzotto');
 $pdf->SetTitle('Municipio de Monte Carlo');
 //$pdf->SetSubject('TCPDF Tutorial');
 //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
-$pdf->SetHeaderData('montecarlo.png', 17, 'ESTADO DE SANTA CATARINA.', 'Municipio de Monte Carlo');
+$pdf->SetHeaderData('montecarlo.png', 17, 'MUNICÍPIO DE MONTE CARLO', 'ESTADO DE SANTA CATARINA');
 
 // set header and footer fonts
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -224,7 +227,7 @@ $pdf->Cell(148, 4, 'ENDERECO', 1, 1, 'C', 1, '', 0); //endereco
 
 $pdf->setCellMargins(0, 2, 2, 2);
 $pdf->SetFont('helvetica', '', 10);
-$pdf->Cell(30, 4, $processo.'   '.$sigla_modal.' '.$modalidade, 1, 0, 'C', 0, '', 0); //processo
+$pdf->Cell(30, 4, $processo.'   '.$sigla_modal.' '.$licitacao, 1, 0, 'C', 0, '', 0); //processo
 $pdf->setCellMargins(0, 0, 0, 0);
 $pdf->Cell(148, 4, $enderecoCredor, 1, 1, 'L', 0, '', 0); //endereco
 //$pdf->Cell(46, 4, 'Salto', 1, 1, 'C', 0, '', 0); //bairro
@@ -247,8 +250,10 @@ $pdf->Cell(12, 4, 'SC', 1, 0, 'C', 0, '', 0);
 //$pdf->Cell(22, 4, '89.031-001', 1, 0, 'C', 0, '', 0);
 $pdf->Cell(84, 4, '', 1, 1, 'C', 0, '', 0); 
 
+$pdf->SetFont('helvetica', 'B', 10);
 $pdf->setCellMargins(0, 6, 2, 0);
 $pdf->Cell(180, 0, 'PRAZO DE ENTREGA: '.$prazo, 1, 1, 'C', 1, '', 0);
+$pdf->SetFont('helvetica', '', 10);
 $pdf->setCellMargins(0, 3, 2, 0);
 $pdf->Cell(180, 0, 'DADOS PARA EMISSÃO DA NF-e', 1, 1, 'C', 1, '', 0);
 $pdf->Ln(2);
@@ -298,8 +303,7 @@ $pdf->Ln(10);
 $pdf->Cell(180, 0, 'Solicitante: '.$solicitante, 1, 1, 'L',0, '', 0);
 $pdf->Cell(180, 0, 'Departamento: '.$departamento, 1, 1, 'L',0, '', 0);
 $pdf->Cell(180, 0, 'Aplicação: '.$aplicacao, 1, 1, 'L',0, '', 0);
-$pdf->Cell(180, 0, 'Ordem de Compra autorizada por: ', 1, 1, 'L',0, '', 0);
-
+$pdf->Cell(180, 0, 'Ordem de Compra autorizada por: '.$nomeUsuario, 1, 1, 'L' ,0, '', 0);
 
 // ---------------------------------------------------------
 

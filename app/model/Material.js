@@ -10,6 +10,7 @@ Ext.define('OC.model.Material', {
 		'vlr_descto',
 		'preco_unit_part',
 		'preco_total', 
-		'comprar'
+		'comprar',
+		'vigencia'
 	]
 });

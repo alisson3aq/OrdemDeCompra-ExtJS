@@ -29,4 +29,6 @@
 		"total" => $total,
 		"users" => $users
 	));
+
+	$mysqli->close();
 ?>

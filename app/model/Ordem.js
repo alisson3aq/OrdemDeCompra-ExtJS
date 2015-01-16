@@ -11,6 +11,7 @@ Ext.define('OC.model.Ordem', {
 		'departamento',
 		'aplicacao',
 		'prazo',
-		'situacao'
+		'situacao',
+		'nome' //nome credor
 	]
 });

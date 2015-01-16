@@ -74,17 +74,12 @@ Ext.define('OC.controller.usuarios.Users', {
 	},
 
 	onSaveClick: function(btn, e, eOpts) {
-		var win = btn.up('window'); //pegar window
-		
-		var form = win.down('form');
-
-		var values = form.getValues();
-
-		var record = form.getRecord();
-
-		var grid = Ext.ComponentQuery.query('usersgrid grid')[0];
-
-		var store = grid.getStore();
+		var win = btn.up('window'), //pegar window
+		 form = win.down('form'),
+		 values = form.getValues(),
+		 record = form.getRecord(),
+		 grid = Ext.ComponentQuery.query('usersgrid grid')[0],
+		 store = grid.getStore();
 
 
 		if (record) {
@@ -97,8 +92,8 @@ Ext.define('OC.controller.usuarios.Users', {
 			//console.OC('novo');
 			var novousuario = Ext.create('OC.model.User', {
 				nome: values.nome,
+				login: values.login,
 			    senha: OC.util.MD5.encode(values.senha),
-				//senha: values.senha,
 				email: values.email
 			});
 

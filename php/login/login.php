@@ -14,7 +14,7 @@ $pass = stripslashes($pass);
 
 $userName = $mysqli->real_escape_string($userName);
 $pass = $mysqli->real_escape_string($pass);
-$sql = "SELECT * FROM usuarios WHERE nome='$userName' AND senha='$pass'";
+$sql = "SELECT * FROM usuarios WHERE login='$userName' AND senha='$pass'";
 
 $result = array();
 

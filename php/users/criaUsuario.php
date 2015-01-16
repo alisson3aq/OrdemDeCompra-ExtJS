@@ -7,12 +7,14 @@
 	$data = json_decode(stripslashes($info));
 
 	$nome = $data->nome;
+	$login = $data->login;
 	$senha = $data->senha;
 	$email = $data->email;
 
 	//consulta sql
-	$query = sprintf("INSERT INTO usuarios (nome, senha, email) values ('%s', '%s', '%s')",
+	$query = sprintf("INSERT INTO usuarios (nome, login, senha, email) values ('%s', '%s', '%s', '%s')",
 		mysql_real_escape_string($nome),
+		mysql_real_escape_string($login),
 		mysql_real_escape_string($senha),
 		mysql_real_escape_string($email));
 
@@ -23,8 +25,11 @@
 		"usuarios" => array(
 			"iduser" => mysql_insert_id(),
 			"nome" => $nome,
+			"login" => $login,
 			"senha" => $senha,
 			"email" => $email
 		)
 	));
+
+	$mysqli->close();
 ?>
