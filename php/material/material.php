@@ -8,6 +8,7 @@
 	$ano = $_REQUEST['ano'];
 	$processo = $_REQUEST['processo'];
 
+
 	$queryString = "SELECT  
        participantes.i_credores,  
        credores.nome,

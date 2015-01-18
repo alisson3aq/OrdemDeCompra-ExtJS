@@ -3,7 +3,7 @@ Ext.define('OC.store.Material', {
 
     model: 'OC.model.Material',
 
-    pageSize: 40, // PAGINAGINA MAXIMA
+    pageSize: 2000, // PAGINAGINA MAXIMA
 
     proxy: {
         type: 'ajax',

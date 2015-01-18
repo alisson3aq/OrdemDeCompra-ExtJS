@@ -31,7 +31,7 @@ Ext.define('OC.view.Login', {
             name: 'loginUsername',
             fieldLabel: 'Usuário',
             maxLength: 25,
-            value: 'rafael'
+            //value: 'rafael'
         }, {
             inputType: 'password',
             name: 'loginPassword',
@@ -39,7 +39,7 @@ Ext.define('OC.view.Login', {
             enableKeyEvents: true,
             id: 'password',
             maxLength: 15,
-            value: 'qwe123',
+            //value: 'qwe123',
             //vtype: 'customPass',
             msgTarget: 'side'
         }],

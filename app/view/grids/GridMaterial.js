@@ -1,7 +1,7 @@
 Ext.define('OC.view.grids.GridMaterial', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.gridmaterial',
-    
+
     requires: ['Ext.toolbar.Paging'],
 
     store: 'OC.store.Material',
@@ -139,8 +139,7 @@ Ext.define('OC.view.grids.GridMaterial', {
                     //       Ext.Msg.alert(action, action + ' ' + rec.get('nome_mat'));
                     //   }
             }]
-        },
-        {
+        }, {
             text: 'Vigencia',
             dataIndex: 'vigencia',
             width: 90
@@ -154,12 +153,11 @@ Ext.define('OC.view.grids.GridMaterial', {
     renderTo: Ext.getBody(),
 
     dockedItems: [{
-            xtype: 'pagingtoolbar',
-            store: 'OC.store.Material', // same store GridPanel is using --- EXEMPLO da documentação
-            dock: 'bottom',
-            displayInfo: true
-        }
-    ],
+        xtype: 'pagingtoolbar',
+        store: 'OC.store.Material', // same store GridPanel is using --- EXEMPLO da documentação
+        dock: 'bottom',
+        displayInfo: true
+    }],
 
 
 

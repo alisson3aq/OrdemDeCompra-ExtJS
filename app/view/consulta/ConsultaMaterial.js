@@ -133,7 +133,7 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 			}, {
 				xtype: 'numberfield',
 				fieldLabel: 'Ano',
-				value: '2014',
+				value: '2015',
 				name: 'ano',
 				allowBlank: false // requires a non-empty value
 			}, {

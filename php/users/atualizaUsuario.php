@@ -4,7 +4,7 @@
 
 	$info = $_POST['users'];
 
-	$data = json_decode(stripslashes($info));
+	$data = json_decode($info);
 
 	$nome = $data->nome;
 	$login = $data->login;
