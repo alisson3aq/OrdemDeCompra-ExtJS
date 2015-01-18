@@ -16,13 +16,19 @@ Ext.define('OC.controller.Main', {
 				click: this.openGerarOrdem
 			},
 
+			"app-main button#arquivo > menu > menuitem#arqB": {
+				click: this.openOrdemGrid
+			},
+
 			"app-main button#opcoes > menu > menuitem#opA": {
 				click: this.openUsersGrid
 			},
 
-			"app-main button#arquivo > menu > menuitem#arqB": {
-				click: this.openOrdemGrid
+			"app-main button#opcoes > menu > menuitem#opB": {
+				click: this.openCancelarOrdem
 			},
+
+
 		})
 	},
 
@@ -39,7 +45,11 @@ Ext.define('OC.controller.Main', {
 	},
 
 	openOrdemGrid: function(btn, eOpts) {
-			Ext.create('OC.view.consulta.ConsultaOrdem');
+		Ext.create('OC.view.consulta.ConsultaOrdem');
+	},
+
+	openCancelarOrdem: function(btn, eOpts) {
+		Ext.create('OC.view.consulta.CancelarOrdem');
 	}
 
 

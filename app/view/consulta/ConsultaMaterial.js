@@ -57,12 +57,9 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 		xtype: 'form',
 		height: 40,
 		itemId: 'formObs',
-		//width: 1300,
-		//anchor: '100%',
 		layout: {
 			type: 'hbox',
 			align: 'middle',
-			//pack: 'center'
 		},
 
 		defaults: { //aplica em todos os itens
@@ -72,7 +69,6 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 
 		items: [{
 			xtype: 'combobox',
-		//	width: 350,
 			anchor: '18%',
 			fieldLabel: 'Entidade:',
 			store: 'OC.store.combobox.ComboboxEntidades',
@@ -120,7 +116,7 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 				//anchor: '100%',
 				//scale: 'medium',
 				labelAlign: 'right'
-					//mgsTarget: 'side'
+				//mgsTarget: 'side'
 			},
 
 			items: [{

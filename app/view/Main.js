@@ -81,7 +81,9 @@ Ext.define('OC.view.Main', {
                         id: 'opA',
                         iconCls: 'icon-user-add'
                     }, {
-                        text: 'Item 2',
+                        text: 'Cancelar Ordem',
+                        id: 'opB',
+                        iconCls: 'icon-cancel'
                     }, {
                         text: 'Item 3'
                     }, {

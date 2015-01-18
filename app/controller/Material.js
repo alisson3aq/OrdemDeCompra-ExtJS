@@ -232,7 +232,6 @@ Ext.define('OC.controller.Material', {
 								url: 'php/ordem/atualizaQtde.php',
 								method: 'POST',
 								params: {
-									ano: values.ano,
 									nOrdem: nOrdem.getValue() + 1
 								},
 								success: function(conn, response, options, eOpts) {
@@ -259,7 +258,7 @@ Ext.define('OC.controller.Material', {
 									var win = new Ext.Window({
 										title: 'Ordem de Compra',
 										iconCls: 'icon-grid',
-										//maximized: true,
+										modal: true,
 										autoShow: true,
 										items: [{
 											xtype: 'uxiframe',

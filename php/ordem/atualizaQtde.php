@@ -2,7 +2,6 @@
 	//chama o arquivo de conexão com o bd
 	include("../conectar.php");
 
-	$ano = $_REQUEST['ano'];
 	$nOrdem = $_REQUEST['nOrdem'];
 
 	//consulta sql
@@ -15,9 +14,7 @@
 				(ordem.ano = itens_processo.i_ano_proc) and
 				(itens_ordem.i_material = itens_processo.i_material) and
 				(participantes.i_item = itens_processo.i_item) and
-				(ordem.ano = '$ano') and
 				(ordem.id = '$nOrdem')",
-		mysql_real_escape_string($ano),
 		mysql_real_escape_string($nOrdem));
 
 	$rs = mysql_query($query);
