@@ -22,7 +22,7 @@ WHERE (itens_ordem.id_ordem = ordem.id) and
 
 	echo json_encode(array(
 		"success" => mysql_errno() == 0,
-		"afetados" != mysql_affected_rows()
+		"afetados" => mysql_affected_rows() != 0
 	));
 
 	$mysqli->close();

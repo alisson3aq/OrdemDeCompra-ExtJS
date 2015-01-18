@@ -41,8 +41,19 @@ Ext.define('OC.view.grids.GridOrdensEmitidas', {
         }
     }, {
         text: 'Situação',
-        dataIndex: 'situacao',
-        width: 100
+        menuDisabled: true,
+        sortable: false,
+        xtype: 'actioncolumn',
+        width: 70,
+        items: [{
+            getClass: function(v, meta, rec) {
+                if (rec.get('situacao') == 1) {
+                    return 'icon-stop';
+                } else {
+                    return 'icon-add';
+                }
+            }
+        }]
     }],
 
     height: 550,

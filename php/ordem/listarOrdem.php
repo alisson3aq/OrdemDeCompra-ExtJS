@@ -5,7 +5,7 @@
 	$start = $_REQUEST['start'];
 	$limit = $_REQUEST['limit'];
 
-	$queryString = "SELECT ordem.id, credores.nome FROM ordem, credores WHERE (ordem.i_credores = credores.i_credores) LIMIT $start,  $limit";
+	$queryString = "SELECT ordem.id, credores.nome, ordem.situacao FROM ordem, credores WHERE (ordem.i_credores = credores.i_credores) ORDER BY ordem.id DESC LIMIT $start,  $limit";
 
 	//consulta sql
 	$query = mysql_query($queryString) or die(mysql_error());
