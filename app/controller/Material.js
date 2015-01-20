@@ -298,9 +298,7 @@ Ext.define('OC.controller.Material', {
 			Ext.Msg.alert('Aviso!', 'É necessario escolher a quantidade para comprar!');
 		} else if (rec.data.comprar > rec.data.qtde_cotada) {
 			Ext.Msg.alert('Aviso!', 'A quantidade para comprar é maior do que a licitada!');
-		} else if (values.data > rec.data.vigencia){
-			Ext.Msg.alert('Aviso!', 'A data de validade desse processo acabou!!');
-		}else {
+		} else {
 			var gridOc = Ext.ComponentQuery.query('consultamaterial gridordem')[0],
 				storeOc = gridOc.getStore();
 
