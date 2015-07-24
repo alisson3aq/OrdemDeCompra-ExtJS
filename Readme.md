@@ -1,6 +1,5 @@
 
-
-<img src="https://imageshack.com/i/ipKNg112j" alt="Banana" />
+![Banana](https://imageshack.com/i/ipKNg112j)
 
 # OC/app
 
