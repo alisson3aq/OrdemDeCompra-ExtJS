@@ -1,37 +1,33 @@
+Sistema Web desenvolvido em ExtJS+PHP para emissão de Ordens de Compra baseado em processos licitatórios.
 
-![Banana](http://imagizer.imageshack.us/v2/320x240q90/673/KNg112.jpg)
 
-# OC/app
+![](http://imagizer.imageshack.us/v2/640x480q90/901/PjgNkk.jpg)
 
-This folder contains the javascript files for the application.
+![](http://imagizer.imageshack.us/v2/640x480q90/673/KNg112.jpg)
 
-# OC/resources
 
-This folder contains static resources (typically an `"images"` folder as well).
+----
 
-# OC/overrides
+# ./controller
 
-This folder contains override classes. All overrides in this folder will be 
-automatically included in application builds if the target class of the override
-is loaded.
+This folder contains the controllers
 
-# OC/sass/etc
+# ./model
 
-This folder contains misc. support code for sass builds (global functions, 
-mixins, etc.)
+This folder contains the models
 
-# OC/sass/src
+# ./view
 
-This folder contains sass files defining css rules corresponding to classes
-included in the application's javascript code build.  By default, files in this 
-folder are mapped to the application's root namespace, 'OC'. The
-namespace to which files in this directory are matched is controlled by the
-app.sass.namespace property in OC/.sencha/app/sencha.cfg. 
+This folder contains the views
 
-# OC/sass/var
+# ./store
 
-This folder contains sass files defining sass variables corresponding to classes
-included in the application's javascript code build.  By default, files in this 
-folder are mapped to the application's root namespace, 'OC'. The
-namespace to which files in this directory are matched is controlled by the
-app.sass.namespace property in OC/.sencha/app/sencha.cfg. 
+This folder contains the stores
+
+# ./php
+
+This folder contains the back-ends archives
+
+# ./sql
+
+This folder contains the sql scripts
