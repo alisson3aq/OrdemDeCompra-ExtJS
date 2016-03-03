@@ -141,7 +141,16 @@ Ext.define('OC.controller.Material', {
 					//codifica os dados em JSON
 					var dadosOrdem = Ext.encode(novaordem.data);
 
-					console.log(dadosOrdem);
+					var dadosItensOrdem = [];
+
+					storeOc.each(function(record) {
+						// adiciona cada registro inteiro ao array de dados
+						dadosItensOrdem.push(record.data);
+					});
+
+					//codifica os dados em JSON
+					dadosItensOrdem = Ext.encode(dadosItensOrdem);
+					//dadosItensOrdem = Ext.util.Utf8.encode(dadosItensOrdem);
 
 					Ext.Ajax.request({
 						url: 'php/ordem/criaOrdem.php',
@@ -170,19 +179,6 @@ Ext.define('OC.controller.Material', {
 							Ext.Msg.alert('Aviso!', 'ERRO! CONTATE O ADMINISTRADOR!');
 						}
 					});
-
-					var dadosItensOrdem = [];
-
-					storeOc.each(function(record) {
-						// adiciona cada registro inteiro ao array de dados
-						dadosItensOrdem.push(record.data);
-					});
-
-					//codifica os dados em JSON
-					dadosItensOrdem = Ext.encode(dadosItensOrdem);
-					//dadosItensOrdem = Ext.util.Utf8.encode(dadosItensOrdem);
-
-					console.log(dadosItensOrdem);
 
 					if (ordemSalva) {
 						Ext.Ajax.request({
@@ -221,38 +217,38 @@ Ext.define('OC.controller.Material', {
 							width: 300,
 							wait: true,
 							waitConfig: {
-								interval: 200
+								interval: 1000
 							},
 							icon: 'ext-mb-download', //custom class in msg-box.html
 							iconHeight: 50,
 						});
+						Ext.Ajax.request({
+							url: 'php/ordem/atualizaQtde.php',
+							method: 'POST',
+							params: {
+								nOrdem: nOrdem.getValue() + 1
+							},
+							success: function(conn, response, options, eOpts) {
+								var result = Ext.JSON.decode(conn.responseText, true);
+
+								if (!result) { // caso seja null
+									result = {};
+									result.success = false;
+									result.msg = conn.responseText;
+								}
+
+								if (result.success) {
+
+								} else {
+									Ext.Msg.alert('Aviso!', 'ERRO AO ATUALIZAR QTDS! CONTATE O ADMINISTRADOR!');
+								}
+							},
+							failure: function(conn, response, options, eOpts) {
+								Ext.Msg.alert('Aviso!', 'ERRO! CONTATE O ADMINISTRADOR!');
+							}
+						});
 						setTimeout(function() {
 							Ext.MessageBox.hide();
-							Ext.Ajax.request({
-								url: 'php/ordem/atualizaQtde.php',
-								method: 'POST',
-								params: {
-									nOrdem: nOrdem.getValue() + 1
-								},
-								success: function(conn, response, options, eOpts) {
-									var result = Ext.JSON.decode(conn.responseText, true);
-
-									if (!result) { // caso seja null
-										result = {};
-										result.success = false;
-										result.msg = conn.responseText;
-									}
-
-									if (result.success) {
-
-									} else {
-										Ext.Msg.alert('Aviso!', 'ERRO AO ATUALIZAR QTDS! CONTATE O ADMINISTRADOR!');
-									}
-								},
-								failure: function(conn, response, options, eOpts) {
-									Ext.Msg.alert('Aviso!', 'ERRO! CONTATE O ADMINISTRADOR!');
-								}
-							});
 							Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
 								if (choice == 'yes') {
 									var win = new Ext.Window({
@@ -270,8 +266,7 @@ Ext.define('OC.controller.Material', {
 								}
 								winConsulta.close();
 							});
-						}, 10000);
-
+						}, 30000);
 					}
 
 				}

@@ -1,7 +1,7 @@
 <?php
 
 //nome do servidor (127.0.0.1)
-$servidor = "localhost";
+$servidor = "192.168.200.10";
  
 //usuário do banco de dados
 $user = "root";
@@ -10,7 +10,7 @@ $user = "root";
 $senha = "qwe123";
  
 //nome da base de dados
-$db = "OC";
+$db = "teste";
  
 //executa a conexão com o banco, caso contrário mostra o erro ocorrido
 $conexao = mysql_connect($servidor,$user,$senha) or die (mysql_error());
