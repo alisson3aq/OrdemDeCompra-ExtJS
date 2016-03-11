@@ -124,6 +124,18 @@ Ext.define('OC.controller.Material', {
 			Ext.MessageBox.confirm('Confirmar Download', 'Confirmar emissão de ordem??', function(choice) {
 				if (choice == 'yes') {
 
+					Ext.MessageBox.show({
+						msg: 'Salvando os dados, aguarde...',
+						progressText: 'Salvando...',
+						width: 300,
+						wait: true,
+						waitConfig: {
+							interval: 600
+						},
+						icon: 'ext-mb-download', //custom class in msg-box.html
+						iconHeight: 50,
+					});
+
 					var novaordem = Ext.create('OC.model.Ordem', {
 						id: nOrdem.getValue() + 1,
 						dataPedido: values.data,
@@ -151,6 +163,7 @@ Ext.define('OC.controller.Material', {
 					//codifica os dados em JSON
 					dadosItensOrdem = Ext.encode(dadosItensOrdem);
 					//dadosItensOrdem = Ext.util.Utf8.encode(dadosItensOrdem);
+
 
 					Ext.Ajax.request({
 						url: 'php/ordem/criaOrdem.php',
@@ -211,13 +224,37 @@ Ext.define('OC.controller.Material', {
 					}
 
 					if (itensSalvos) {
+						setTimeout(function() {
+							Ext.MessageBox.hide();
+							Ext.MessageBox.confirm('Confirmar Download', 'Deseja Visualizar a Ordem?', function(choice) {
+								if (choice == 'yes') {
+									var win = new Ext.Window({
+										title: 'Ordem de Compra',
+										iconCls: 'icon-grid',
+										modal: true,
+										autoShow: true,
+										items: [{
+											xtype: 'uxiframe',
+											width: 600,
+											height: 600,
+											src: 'php/pdf/oc.php?nOrdem=' + (nOrdem.getValue() + 1)
+										}]
+									});
+								}
+								winConsulta.close();
+							});
+						}, 10000);
+					}
+
+					// -- ATUALIZAR SEM TRIGGER -- 
+					/*if (itensSalvos) {
 						Ext.MessageBox.show({
 							msg: 'Salvando os dados, aguarde...',
 							progressText: 'Salvando...',
 							width: 300,
 							wait: true,
 							waitConfig: {
-								interval: 1000
+								interval: 1700
 							},
 							icon: 'ext-mb-download', //custom class in msg-box.html
 							iconHeight: 50,
@@ -267,7 +304,7 @@ Ext.define('OC.controller.Material', {
 								winConsulta.close();
 							});
 						}, 30000);
-					}
+					}*/
 
 				}
 
