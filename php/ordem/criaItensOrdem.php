@@ -1,5 +1,6 @@
 <?php
-
+	ini_set('max_execution_time', 300);
+	
 	//chama o arquivo de conexão com o bd
 	include("../conectar.php");
 
