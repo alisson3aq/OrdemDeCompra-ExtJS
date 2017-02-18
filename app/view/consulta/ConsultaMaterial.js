@@ -64,7 +64,7 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 
 		defaults: { //aplica em todos os itens
 			labelAlign: 'right',
-			margin :'3 10 3 1'
+			margin: '3 10 3 1'
 		},
 
 		items: [{
@@ -116,10 +116,17 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 				//anchor: '100%',
 				//scale: 'medium',
 				labelAlign: 'right'
-				//mgsTarget: 'side'
+					//mgsTarget: 'side'
 			},
 
 			items: [{
+				xtype: 'numberfield',
+				anchor: '4%',
+				fieldLabel: 'Entidade',
+				name: 'ent',
+				value: '1',
+				allowBlank: false
+			},{
 				xtype: 'datefield',
 				anchor: '18%',
 				fieldLabel: 'Dia',
@@ -133,7 +140,7 @@ Ext.define('OC.view.consulta.ConsultaMaterial', {
 			}, {
 				xtype: 'numberfield',
 				fieldLabel: 'Ano',
-				value: '2015',
+				value: '2016',
 				name: 'ano',
 				allowBlank: false // requires a non-empty value
 			}, {

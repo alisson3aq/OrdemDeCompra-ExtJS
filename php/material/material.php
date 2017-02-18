@@ -7,36 +7,37 @@
 
 	$ano = $_REQUEST['ano'];
 	$processo = $_REQUEST['processo'];
+   $ent = $_REQUEST['ent'];
 
 
-	$queryString = "SELECT  
-       participantes.i_credores,  
-       credores.nome,
-         material.i_material,
-         material.nome_mat,
-         participantes.nome_marca,
+	$queryString = "SELECT   credores.nome,
+         participantes.i_credores,   
+         participantes.i_item,  
+         material.nome_mat, 
          participantes.qtde_cotada,  
-         material.un_codi,
          participantes.vlr_descto,
          participantes.preco_unit_part,    
-         participantes.preco_total,
-         processos.vigencia
+         participantes.preco_total,   
+         itens_processo.i_material,   
+    participantes.nome_marca
     FROM participantes,   
-         itens_processo,
+         itens_processo,   
          material,   
-         credores,
-         processos 
+         credores  
    WHERE   
-         (itens_processo.i_item = participantes.i_item) AND    
-         (material.i_material = itens_processo.i_material) AND    
-         (credores.i_credores = participantes.i_credores) AND 
-         (participantes.i_processo = processos.i_processo) AND
-         (participantes.i_ano_proc = processos.i_ano_proc )AND
+         ( itens_processo.i_item = participantes.i_item ) and    
+         ( material.i_material = itens_processo.i_material ) and    
+         ( credores.i_credores = participantes.i_credores ) and
+         ( credores.i_entidades = participantes.i_entidades) and
+         ( material.i_entidades = participantes.i_entidades) and
+         ( itens_processo.i_entidades = participantes.i_entidades) and
          (participantes.i_ano_proc = '$ano') AND    
-         (participantes.i_processo = '$processo') AND  
-         (participantes.situacao = 2 ) AND  
+         (participantes.i_processo = '$processo') AND
+         (participantes.situacao = 2 ) AND
+         (participantes.i_entidades = '$ent') AND   
          (itens_processo.i_ano_proc = '$ano') AND
-         (itens_processo.i_processo = '$processo') LIMIT $start,  $limit";
+         (itens_processo.i_processo = '$processo') AND
+         (itens_processo.i_entidades = '$ent') LIMIT $start, $limit";
 
 	//consulta sql
 	$query = mysql_query($queryString) or die(mysql_error());
@@ -57,12 +58,16 @@
    WHERE   
          (itens_processo.i_item = participantes.i_item) and    
          (material.i_material = itens_processo.i_material) and    
-         (credores.i_credores = participantes.i_credores) and  
+         (credores.i_credores = participantes.i_credores) and
+         ( credores.i_entidades = participantes.i_entidades) and
+         ( material.i_entidades = participantes.i_entidades) and
          (participantes.i_ano_proc = '$ano') AND    
          (participantes.i_processo = '$processo') AND  
-         (participantes.situacao = 2 ) AND  
+         (participantes.situacao = 2 ) AND
+         (participantes.i_entidades = '$ent') AND 
          (itens_processo.i_ano_proc = '$ano') AND
-         (itens_processo.i_processo = '$processo')");
+         (itens_processo.i_processo = '$processo') AND
+         (itens_processo.i_entidades = '$ent')");
         
 	$row = mysql_fetch_assoc($queryTotal);
 	$total = $row['num'];

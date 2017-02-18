@@ -53,6 +53,7 @@ Ext.define('OC.controller.Material', {
 
 		store.load({
 			params: {
+				ent: values.ent,
 				ano: values.ano,
 				processo: values.processo,
 			}

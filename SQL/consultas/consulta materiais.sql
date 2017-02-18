@@ -7,7 +7,7 @@ SELECT   credores.nome,
          participantes.preco_unit_part,    
          participantes.preco_total,   
          itens_processo.i_material,   
-	 participantes.nome_marca
+    participantes.nome_marca
     FROM participantes,   
          itens_processo,   
          material,   
@@ -15,14 +15,49 @@ SELECT   credores.nome,
    WHERE   
          ( itens_processo.i_item = participantes.i_item ) and    
          ( material.i_material = itens_processo.i_material ) and    
-         ( credores.i_credores = participantes.i_credores ) and  
-         (participantes.i_ano_proc = 2014) AND    
-         (participantes.i_processo = 55) AND  
-         (participantes.situacao IN (2,10)) AND  
-         (itens_processo.i_ano_proc = 2014) AND
-         (itens_processo.i_processo =55)   
-ORDER BY participantes.i_credores ASC,   
-         participantes.i_item ASC  
+         ( credores.i_credores = participantes.i_credores ) and
+         ( credores.i_entidades = participantes.i_entidades) and
+         ( material.i_entidades = participantes.i_entidades) and
+         ( itens_processo.i_entidades = participantes.i_entidades) and
+         (participantes.i_ano_proc = 2017) AND    
+         (participantes.i_processo = 6) AND
+         (participantes.situacao IN (2,10)) AND
+         (participantes.i_entidades = 1) AND   
+         (itens_processo.i_ano_proc = 2017) AND
+         (itens_processo.i_processo = 6) AND
+         (itens_processo.i_entidades = 1)
+ORDER BY participantes.i_credores ASC,
+         participantes.i_item ASC
+
+
+         SELECT   credores.nome,
+         participantes.i_credores,   
+         participantes.i_item,  
+         material.nome_mat, 
+         participantes.qtde_cotada,  
+         participantes.vlr_descto,
+         participantes.preco_unit_part,    
+         participantes.preco_total,   
+         itens_processo.i_material,   
+    participantes.nome_marca
+    FROM participantes,   
+         itens_processo,   
+         material,   
+         credores  
+   WHERE   
+         ( itens_processo.i_item = participantes.i_item ) and    
+         ( material.i_material = itens_processo.i_material ) and    
+         ( credores.i_credores = participantes.i_credores ) and
+         ( credores.i_entidades = participantes.i_entidades) and
+         ( material.i_entidades = participantes.i_entidades) and
+         ( itens_processo.i_entidades = participantes.i_entidades) and
+         (participantes.i_ano_proc = '$ano') AND    
+         (participantes.i_processo = '$processo') AND
+         (participantes.situacao = 2 ) AND
+         (participantes.i_entidades = '$ent') AND   
+         (itens_processo.i_ano_proc = '$ano') AND
+         (itens_processo.i_processo = '$processo') AND
+         (itens_processo.i_entidades = '$ent') LIMIT $start, $limit
 
 
 
